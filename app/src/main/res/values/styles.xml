@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <style name="AppBottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
+        <!-- Customize BottomNavigationView appearance here -->
+        <item name="android:background">@color/bottom_nav_background</item>
+        <item name="itemTextColor">@color/bottom_nav_text_color</item>
+        <item name="itemIconTint">@color/bottom_nav_icon_tint</item>
+    </style>
+
+
+</resources>

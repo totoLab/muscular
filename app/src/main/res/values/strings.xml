@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Muscular</string>
+    <string name="tab_stats">Statistiche</string>
+    <string name="tab_workouts">Schede</string>
+    <string name="tab_exercises">Esercizi</string>
+
+    <string name="button_back">Indietro</string>
+
+    <string name="image_logo_description">Logo</string>
+
+    <string name="default_exercise_image_description">Exercise description</string>
+
+    <string name="delete">Elimina</string>
+    <string name="exercises_default_empty">Il database di esercizi è vuoto.</string>
+    <string name="button_exercise_new">Aggiungi</string>
+</resources>
