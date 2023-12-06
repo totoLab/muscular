@@ -1,0 +1,49 @@
+*.iml
+.gradle
+
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+# Built application files
+*.apk
+*.ap_
+*.aab
+*.dex
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (e.g., proguard-rules.pro)
+proguard-rules.pro
+
+# Android Studio
+*.iml
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.suo
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# User-specific files
+.gradle/
+.idea/
