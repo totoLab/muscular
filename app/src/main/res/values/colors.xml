@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <!-- Color values for BottomNavigationView customization -->
+    <color name="bottom_nav_background">#FFFFFF</color> <!-- Example: Blue background color -->
+    <color name="bottom_nav_text_color">#FF4081</color> <!-- Example: White text color -->
+    <color name="bottom_nav_icon_tint">#FFFFFF</color> <!-- Example: Pink icon tint color -->
+</resources>
