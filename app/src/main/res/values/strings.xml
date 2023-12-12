@@ -10,7 +10,8 @@
 
     <string name="default_exercise_image_description">Exercise description</string>
 
-    <string name="delete">Elimina</string>
+    <string name="button_delete">Elimina</string>
     <string name="exercises_default_empty">Il database di esercizi è vuoto.</string>
     <string name="button_exercise_new">Aggiungi</string>
+    <string name="button_modify">Modifica</string>
 </resources>
