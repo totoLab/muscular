@@ -1,15 +1,16 @@
 package com.antolab.muscular
 
+import android.app.*
 import android.os.*
 import android.util.*
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import java.io.*
-import java.util.*
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
+import java.io.*
+import java.util.*
 
 class ExercisesActivity : AppCompatActivity() {
 
@@ -35,10 +36,8 @@ class ExercisesActivity : AppCompatActivity() {
     }
 
     private fun showExercise(container: LinearLayout, exercise: Exercise): Boolean {
-        val exerciseTemplateLayoutId = R.layout.exercise_template
-
         // Inflate the exercise template and make it visible
-        val exerciseElement : LinearLayout = layoutInflater.inflate(exerciseTemplateLayoutId, null) as LinearLayout
+        val exerciseElement : RelativeLayout = layoutInflater.inflate(R.layout.exercise_template, null) as RelativeLayout
         exerciseElement.visibility = View.VISIBLE
 
         // Setup information about the exercise
@@ -51,10 +50,10 @@ class ExercisesActivity : AppCompatActivity() {
         textViewExerciseDescription.text = exercise.description
 
         // image
-        setImage(exerciseElement, exercise.image)
+        val setImageOutcome = setImage(exerciseElement, exercise.image)
 
         // deleting specific exercise from database
-        val deleteButton = exerciseElement.findViewById<Button>(R.id.deleteButton)
+        val deleteButton = exerciseElement.findViewById<Button>(R.id.exercise_delete_button)
         deleteButton.setOnClickListener {
             // TODO: Implement delete functionality
             Toast.makeText(this, "Deleted ${exercise.name} from the list", Toast.LENGTH_LONG).show()
@@ -62,7 +61,7 @@ class ExercisesActivity : AppCompatActivity() {
 
         // add to the container
         container.addView(exerciseElement)
-        return true // TODO: implement error reporting
+        return setImageOutcome
     }
 
     private fun readJsonFromFile(fileName: String): Map<String, Exercise> {
@@ -88,16 +87,38 @@ class ExercisesActivity : AppCompatActivity() {
 
     // TODO: If you're calling the setImage() function from the main thread, it might cause the UI thread to freeze while loading the image.
     //  Consider using an asynchronous task or background thread to load the image without blocking the main UI.
-    private fun setImage(inflatedElement: LinearLayout, imageName: String) {
+    private fun setImage(inflatedElement: RelativeLayout, imageName: String): Boolean {
+        var outcome: Boolean
+        var msg: String
+
         val id: Int = imageId(imageName) // assuming image resources are saved in res/drawable
-        val image = inflatedElement.findViewById<ImageView>(R.id.exerciseImage)
+        val imageThumbButton = inflatedElement.findViewById<ImageView>(R.id.image_thumb_button)
         if (id == 0) {
-            image.visibility = View.GONE
-            return
+            imageThumbButton.visibility = View.GONE
+            msg = "Image $id not loaded from $imageName"
+            outcome = false
         } else {
-            image.setImageResource(id)
+            imageThumbButton.setImageResource(id)
+            imageThumbButton.setOnClickListener{
+                showFullscreenImage(null, id)
+            }
+            msg = "Image $id loaded from $imageName"
+            outcome = true
         }
-        Log.d("imageLoading", "Image $id is from $imageName")
+        Log.d("imageLoading", msg)
+        return outcome
+    }
+
+
+    fun showFullscreenImage(view: View?, imageId: Int) {
+        // Create a dialog with a custom layout
+        val fullscreenDialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        fullscreenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        fullscreenDialog.setContentView(R.layout.dialog_fullscreen_image)
+
+        val fullscreenImageView = fullscreenDialog.findViewById<ImageView>(R.id.fullscreenImageView)
+        fullscreenImageView.setImageResource(imageId)
+        fullscreenDialog.show()
     }
 
     private fun imageId(imagePath: String) : Int {
