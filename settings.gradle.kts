@@ -14,6 +14,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Muscular"
+rootProject.name = "muscular"
 include(":app")
  

@@ -14,4 +14,5 @@
     <string name="exercises_default_empty">Il database di esercizi è vuoto.</string>
     <string name="button_exercise_new">Aggiungi</string>
     <string name="button_modify">Modifica</string>
+    <string name="default_notification_channel_id">channel_id</string>
 </resources>
