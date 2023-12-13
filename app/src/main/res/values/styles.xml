@@ -1,12 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
-
+<!-- res/values/styles.xml -->
 <resources>
-    <style name="AppBottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
-        <!-- Customize BottomNavigationView appearance here -->
-        <item name="android:background">@color/bottom_nav_background</item>
-        <item name="itemTextColor">@color/bottom_nav_text_color</item>
-        <item name="itemIconTint">@color/bottom_nav_icon_tint</item>
+
+    <!-- Colori di Material Design 3 -->
+    <color name="md_primary">#6200EE</color>
+    <color name="md_primary_dark">#3700B3</color>
+    <color name="md_accent">#03DAC5</color>
+    <color name="md_surface">#FFFFFF</color>
+    <color name="md_on_surface">#000000</color>
+
+    <!-- Personalizzazione del colore -->
+    <style name="MuscularTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/md_primary</item>
+        <item name="colorPrimaryDark">@color/md_primary_dark</item>
+        <item name="colorAccent">@color/md_accent</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
+    <style name="MyActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@color/md_primary</item>
+        <item name="titleTextStyle">@style/MyTitleText</item>
+    </style>
+
+    <style name="MyTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <!-- Personalizzazione BottomNavigationView -->
+    <style name="AppBottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
+        <item name="android:background">@color/md_surface</item>
+        <item name="itemTextColor">@color/md_on_surface</item>
+        <item name="itemIconTint">@color/md_on_surface</item>
+    </style>
 
 </resources>
