@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.*
 import java.io.*
 import java.util.*
 
@@ -29,8 +30,10 @@ class ExercisesActivity : AppCompatActivity() {
             return
         } else {
             for (exerciseEntry in exercisesDb) {
-                val adding_outcome: Boolean = showExercise(container, exerciseEntry.value)
-                Log.d("exerciseLoading", "$exerciseEntry was ${if (adding_outcome) "" else "not"} added to the scroll view")
+                MainScope().launch{
+                    val addingOutcome: Boolean = showExercise(container, exerciseEntry.value)
+                    Log.d("exerciseLoading", "$exerciseEntry was ${if (addingOutcome) "" else "not"} added to the scroll view")
+                }
             }
         }
     }
