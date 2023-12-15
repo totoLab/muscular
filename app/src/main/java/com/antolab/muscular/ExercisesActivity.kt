@@ -133,23 +133,6 @@ class ExercisesActivity : AppCompatActivity() {
             ?: mutableMapOf()
     }
 
-    private fun writeMapToJson(fileName: String, map: MutableMap<String, Exercise>) {
-        try {
-            val jsonString = Gson().toJson(map)
-
-            // Open the file output stream
-            applicationContext.openFileOutput(fileName, Context.MODE_PRIVATE).use { outputStream ->
-                // Write the JSON string to the file
-                BufferedWriter(OutputStreamWriter(outputStream)).use { writer ->
-                    writer.write(jsonString)
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-
-
     // TODO: If you're calling the setImage() function from the main thread, it might cause the UI thread to freeze while loading the image.
     //  Consider using an asynchronous task or background thread to load the image without blocking the main UI.
     private fun setImage(inflatedElement: RelativeLayout, imageName: String): Boolean {
