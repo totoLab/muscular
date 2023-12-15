@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Muscular</string>
     <string name="tab_stats">Estadísticas</string>
     <string name="tab_workouts">Tarjetas</string>
     <string name="tab_exercises">Ejercicios</string>
@@ -14,7 +13,6 @@
     <string name="exercises_default_empty">La base de datos de ejercicios está vacía.</string>
     <string name="button_exercise_new">agregar</string>
     <string name="button_modify">Editar</string>
-    <string name="default_notification_channel_id">Canal ID</string>
     <string name="bn_name">Elegir lenguaje</string>
     <string name="ad_title">elige tu idioma</string>
 </resources>

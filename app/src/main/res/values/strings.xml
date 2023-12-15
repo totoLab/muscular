@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Muscular</string>
+    <string name="app_name" translatable="false">Muscular</string>
     <string name="tab_stats">Statistiche</string>
     <string name="tab_workouts">Schede</string>
     <string name="tab_exercises">Esercizi</string>
@@ -8,13 +8,13 @@
 
     <string name="image_logo_description">Logo</string>
 
-    <string name="default_exercise_image_description">Exercise description</string>
+    <string name="default_exercise_image_description">Descrizione dell\'esercizio</string>
 
     <string name="button_delete">Elimina</string>
     <string name="exercises_default_empty">Il database di esercizi è vuoto.</string>
     <string name="button_exercise_new">Aggiungi</string>
     <string name="button_modify">Modifica</string>
-    <string name="default_notification_channel_id">channel_id</string>
+    <string name="default_notification_channel_id" translatable="false">channel_id</string>
     <string name="bn_name">Imposta lingua</string>
     <string name="ad_title">Seleziona la lingua</string>
 </resources>
