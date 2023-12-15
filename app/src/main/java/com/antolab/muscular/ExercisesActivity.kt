@@ -1,6 +1,8 @@
 package com.antolab.muscular
 
 import android.app.*
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.*
 import android.util.*
 import android.view.*
@@ -9,36 +11,59 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
 import java.io.*
 import java.util.*
+import androidx.room.*
+import kotlinx.coroutines.*
+import com.antolab.muscular.db.*
 
 class ExercisesActivity : AppCompatActivity() {
+    private val dbPath = "exercises.json"
+    private lateinit var exerciseDatabase: ExerciseDatabase
+    private lateinit var exerciseDao: ExerciseDao
+    private var TESTING = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercises)
 
-        val scrollView = findViewById<ScrollView>(R.id.scrollView) ?: return // TODO remove unused
+        try {
+            exerciseDatabase = Room.databaseBuilder(
+                applicationContext,
+                ExerciseDatabase::class.java,
+                "exercise_database"
+            ).build()
+
+            exerciseDao = exerciseDatabase.exerciseDao()
+            MainScope().launch {
+                if (TESTING && exerciseDao.getCount() == 0) prepopulation()
+            }
+        } catch (e: Exception) {
+            Log.e("RoomDatabase", "Error creating database", e)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         val container = findViewById<LinearLayout>(R.id.container) ?: return
 
-        // add exercises dynamically
-        val exercisesDb = readJsonFromFile("exercises.json")
-        if (exercisesDb.isEmpty()) {
-            val empty = findViewById<TextView>(R.id.exercices_default_empty)
-            empty.visibility = View.VISIBLE;
-            return
-        } else {
-            for (exerciseEntry in exercisesDb) {
-                MainScope().launch{
-                    val addingOutcome: Boolean = showExercise(container, exerciseEntry.value)
-                    Log.d("exerciseLoading", "$exerciseEntry was ${if (addingOutcome) "" else "not"} added to the scroll view")
+        MainScope().launch {
+            if (exerciseDao.getCount() == 0) {
+                val empty = findViewById<TextView>(R.id.exercices_default_empty)
+                empty.visibility = View.VISIBLE;
+                return@launch
+            } else {
+                // add exercises dynamically
+                for (exercise in exerciseDao.getAllExercises()) {
+                    val adding_outcome: Boolean = showExercise(container, exercise)
+                    Log.d("exerciseLoading", "$exercise was ${if (adding_outcome) "" else "not"} added to the scroll view")
                 }
             }
         }
     }
 
-    private fun showExercise(container: LinearLayout, exercise: Exercise): Boolean {
+    private fun showExercise(container: LinearLayout, exercise: ExerciseEntity): Boolean {
         // Inflate the exercise template and make it visible
         val exerciseElement : RelativeLayout = layoutInflater.inflate(R.layout.exercise_template, null) as RelativeLayout
         exerciseElement.visibility = View.VISIBLE
@@ -58,38 +83,17 @@ class ExercisesActivity : AppCompatActivity() {
         // deleting specific exercise from database
         val deleteButton = exerciseElement.findViewById<Button>(R.id.exercise_delete_button)
         deleteButton.setOnClickListener {
-            // TODO: Implement delete functionality
-            Toast.makeText(this, "Deleted ${exercise.name} from the list", Toast.LENGTH_LONG).show()
+            container.removeView(exerciseElement)
+            MainScope().launch {
+                exerciseDao.delete(exercise)
+                Log.d("exerciseDeletion", "Deleted $exercise from the list.}")
+            }
         }
 
-        // add to the container
         container.addView(exerciseElement)
         return setImageOutcome
     }
 
-    private fun readJsonFromFile(fileName: String): Map<String, Exercise> {
-        val jsonString = StringBuilder()
-        try {
-            // Open the file input stream
-            applicationContext.assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
-                BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
-                    var line: String?
-                    while (reader.readLine().also { line = it } != null) {
-                        jsonString.append(line)
-                    }
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return Gson().fromJson(jsonString.toString(), object : TypeToken<Map<String, Exercise>>() {}.type)
-            ?: emptyMap()
-    }
-
-    // TODO: If you're calling the setImage() function from the main thread, it might cause the UI thread to freeze while loading the image.
-    //  Consider using an asynchronous task or background thread to load the image without blocking the main UI.
     private fun setImage(inflatedElement: RelativeLayout, imageName: String): Boolean {
         var outcome: Boolean
         var msg: String
@@ -128,9 +132,49 @@ class ExercisesActivity : AppCompatActivity() {
         return resources.getIdentifier(imagePath, "drawable", packageName)
     }
 
+    private suspend fun prepopulation() {
+        withContext(Dispatchers.IO) {
+            val oldDb : MutableMap<String, Exercise> = readJsonFromFile(dbPath)
+            Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
+            for (exerciseEntry in oldDb) {
+                var exercise = exerciseEntry.value
+                var exerciseEntity = ExerciseEntity(
+                    name = exercise.name,
+                    description = exercise.description,
+                    image = exercise.name
+                )
+                exerciseDao.insert(exerciseEntity)
+            }
+            val allExercises = exerciseDao.getAllExercises()
+            Log.d("prepopulation", allExercises.toString())
+        }
+    }
+
     data class Exercise(
         @SerializedName("name") val name: String,
         @SerializedName("description") val description: String,
         @SerializedName("image") val image: String
     )
+
+    private fun readJsonFromFile(fileName: String): MutableMap<String, Exercise> {
+        val jsonString = StringBuilder()
+        try {
+            // Open the file input stream
+            assets.open(fileName).use { inputStream ->
+                // Create a buffered reader
+                BufferedReader(InputStreamReader(inputStream)).use { reader ->
+                    // Read the file line by line
+                    var line: String?
+                    while (reader.readLine().also { line = it } != null) {
+                        jsonString.append(line)
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return Gson().fromJson(jsonString.toString(), object : TypeToken<MutableMap<String, Exercise>>() {}.type)
+            ?: mutableMapOf()
+    }
+
 }
