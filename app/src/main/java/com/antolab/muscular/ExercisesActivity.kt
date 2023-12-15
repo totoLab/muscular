@@ -94,8 +94,6 @@ class ExercisesActivity : AppCompatActivity() {
         return setImageOutcome
     }
 
-    // TODO: If you're calling the setImage() function from the main thread, it might cause the UI thread to freeze while loading the image.
-    //  Consider using an asynchronous task or background thread to load the image without blocking the main UI.
     private fun setImage(inflatedElement: RelativeLayout, imageName: String): Boolean {
         var outcome: Boolean
         var msg: String
