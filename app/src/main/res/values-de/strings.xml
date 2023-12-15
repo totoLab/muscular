@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Muskulös</string>
+    <string name="tab_stats">Statistiken</string>
+    <string name="tab_workouts">Karten</string>
+    <string name="tab_exercises">Übungen</string>
+
+    <string name="button_back">Rückwärts</string>
+
+    <string name="image_logo_description">Logo</string>
+
+    <string name="default_exercise_image_description">Übungsbeschreibung</string>
+
+    <string name="button_delete">Entfernen</string>
+    <string name="exercises_default_empty">Die Übungsdatenbank ist leer.</string>
+    <string name="button_exercise_new">hinzufügen</string>
+    <string name="button_modify">Bearbeiten</string>
+    <string name="default_notification_channel_id">Kanal ID</string>
+    <string name="bn_name">Sprache einstellen</string>
+    <string name="ad_title">Wähle deine Sprache</string>
+</resources>

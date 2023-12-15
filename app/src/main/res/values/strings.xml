@@ -15,4 +15,6 @@
     <string name="button_exercise_new">Aggiungi</string>
     <string name="button_modify">Modifica</string>
     <string name="default_notification_channel_id">channel_id</string>
+    <string name="bn_name">Imposta lingua</string>
+    <string name="ad_title">Seleziona la lingua</string>
 </resources>

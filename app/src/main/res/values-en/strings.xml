@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Muscular</string>
+    <string name="tab_stats">Statistics</string>
+    <string name="tab_workouts">Cards</string>
+    <string name="tab_exercises">Exercises</string>
+
+    <string name="button_back">Backwards</string>
+
+    <string name="image_logo_description">Logo</string>
+
+    <string name="default_exercise_image_description">Exercise description</string>
+
+    <string name="button_delete">Remove</string>
+    <string name="exercises_default_empty">The exercise database is empty.</string>
+    <string name="button_exercise_new">add</string>
+    <string name="button_modify">Edit</string>
+    <string name="default_notification_channel_id">channel_id</string>
+    <string name="bn_name">Set language</string>
+    <string name="ad_title">Select your language</string>
+</resources>
