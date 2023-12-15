@@ -18,7 +18,6 @@ import kotlinx.coroutines.*
 import com.antolab.muscular.db.*
 
 class ExercisesActivity : AppCompatActivity() {
-    private val dbPath = "exercises.json"
     private lateinit var exerciseDatabase: ExerciseDatabase
     private lateinit var exerciseDao: ExerciseDao
     private var TESTING = false
@@ -134,6 +133,7 @@ class ExercisesActivity : AppCompatActivity() {
 
     private suspend fun prepopulation() {
         withContext(Dispatchers.IO) {
+            val dbPath = "exercises.json"
             val oldDb : MutableMap<String, Exercise> = readJsonFromFile(dbPath)
             Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
             for (exerciseEntry in oldDb) {
