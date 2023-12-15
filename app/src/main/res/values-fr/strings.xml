@@ -1,0 +1,18 @@
+<resources>
+    <string name="tab_stats">Statistiques</string>
+    <string name="tab_workouts">Cartes</string>
+    <string name="tab_exercises">Des exercices</string>
+
+    <string name="button_back">en arrière</string>
+
+    <string name="image_logo_description">Logo</string>
+
+    <string name="default_exercise_image_description">Description de l\'exercice</string>
+
+    <string name="button_delete">Retirer</string>
+    <string name="exercises_default_empty">La base de données d\'exercices est vide.</string>
+    <string name="button_exercise_new">ajouter</string>
+    <string name="button_modify">Modifier</string>
+    <string name="bn_name">Définir la langue</string>
+    <string name="ad_title">choisissez votre langue</string>
+</resources>

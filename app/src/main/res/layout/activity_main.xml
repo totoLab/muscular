@@ -29,6 +29,7 @@
                 android:text="@string/tab_stats"
                 style="?android:attr/buttonBarButtonStyle" />
 
+
             <Button
                 android:id="@+id/nav_button_workouts"
                 android:layout_width="0dp"
@@ -49,6 +50,7 @@
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="328dp"
         android:layout_height="401dp"
         android:layout_marginTop="30dp"
@@ -79,10 +81,26 @@
             android:contentDescription="@string/image_logo_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_textview_title"
+            app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/ic_launcher_muscular" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/bnLang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bn_name"
+        app:layout_constraintBottom_toTopOf="@+id/mainButtonNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
