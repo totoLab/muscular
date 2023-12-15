@@ -94,45 +94,6 @@ class ExercisesActivity : AppCompatActivity() {
         return setImageOutcome
     }
 
-    private suspend fun prepopulation() {
-        withContext(Dispatchers.IO) {
-            val oldDb : MutableMap<String, Exercise> = readJsonFromFile(dbPath)
-            Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
-            for (exerciseEntry in oldDb) {
-                var exercise = exerciseEntry.value
-                var exerciseEntity = ExerciseEntity(
-                    name = exercise.name,
-                    description = exercise.description,
-                    image = exercise.name
-                )
-                exerciseDao.insert(exerciseEntity)
-            }
-            val allExercises = exerciseDao.getAllExercises()
-            Log.d("prepopulation", allExercises.toString())
-        }
-    }
-
-    private fun readJsonFromFile(fileName: String): MutableMap<String, Exercise> {
-        val jsonString = StringBuilder()
-        try {
-            // Open the file input stream
-            assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
-                BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
-                    var line: String?
-                    while (reader.readLine().also { line = it } != null) {
-                        jsonString.append(line)
-                    }
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return Gson().fromJson(jsonString.toString(), object : TypeToken<MutableMap<String, Exercise>>() {}.type)
-            ?: mutableMapOf()
-    }
-
     // TODO: If you're calling the setImage() function from the main thread, it might cause the UI thread to freeze while loading the image.
     //  Consider using an asynchronous task or background thread to load the image without blocking the main UI.
     private fun setImage(inflatedElement: RelativeLayout, imageName: String): Boolean {
@@ -173,10 +134,49 @@ class ExercisesActivity : AppCompatActivity() {
         return resources.getIdentifier(imagePath, "drawable", packageName)
     }
 
+    private suspend fun prepopulation() {
+        withContext(Dispatchers.IO) {
+            val oldDb : MutableMap<String, Exercise> = readJsonFromFile(dbPath)
+            Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
+            for (exerciseEntry in oldDb) {
+                var exercise = exerciseEntry.value
+                var exerciseEntity = ExerciseEntity(
+                    name = exercise.name,
+                    description = exercise.description,
+                    image = exercise.name
+                )
+                exerciseDao.insert(exerciseEntity)
+            }
+            val allExercises = exerciseDao.getAllExercises()
+            Log.d("prepopulation", allExercises.toString())
+        }
+    }
+
     data class Exercise(
         @SerializedName("name") val name: String,
         @SerializedName("description") val description: String,
         @SerializedName("image") val image: String
     )
+
+    private fun readJsonFromFile(fileName: String): MutableMap<String, Exercise> {
+        val jsonString = StringBuilder()
+        try {
+            // Open the file input stream
+            assets.open(fileName).use { inputStream ->
+                // Create a buffered reader
+                BufferedReader(InputStreamReader(inputStream)).use { reader ->
+                    // Read the file line by line
+                    var line: String?
+                    while (reader.readLine().also { line = it } != null) {
+                        jsonString.append(line)
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return Gson().fromJson(jsonString.toString(), object : TypeToken<MutableMap<String, Exercise>>() {}.type)
+            ?: mutableMapOf()
+    }
 
 }
