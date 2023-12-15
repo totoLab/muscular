@@ -24,22 +24,22 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val nav_button_stats : Button = findViewById<Button>(R.id.nav_button_stats)
-        nav_button_stats.setOnClickListener {
-            val intent_stats = Intent(this, StatsActivity::class.java)
-            startActivity(intent_stats)
+        val navButtonStats : Button = findViewById(R.id.nav_button_stats)
+        navButtonStats.setOnClickListener {
+            val intentStats = Intent(this, StatsActivity::class.java)
+            startActivity(intentStats)
         }
 
-        val nav_button_workouts : Button = findViewById<Button>(R.id.nav_button_workouts)
-        nav_button_workouts.setOnClickListener {
-            val intent_workouts = Intent(this, WorkoutActivity::class.java)
-            startActivity(intent_workouts)
+        val navButtonWorkouts : Button = findViewById(R.id.nav_button_workouts)
+        navButtonWorkouts.setOnClickListener {
+            val intentWorkouts = Intent(this, WorkoutActivity::class.java)
+            startActivity(intentWorkouts)
         }
 
-        val nav_button_exercises : Button = findViewById<Button>(R.id.nav_button_exercises)
-        nav_button_exercises.setOnClickListener {
-            val intent_exercises = Intent(this, ExercisesActivity::class.java)
-            startActivity(intent_exercises)
+        val navButtonExercises : Button = findViewById(R.id.nav_button_exercises)
+        navButtonExercises.setOnClickListener {
+            val intentExercises = Intent(this, ExercisesActivity::class.java)
+            startActivity(intentExercises)
         }
 
 
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
         // ottieni la lingua corrente
         val currentLang = loadLocate()
-        val langIndex : Int = listItems.indexOf(countriesMap.get(currentLang))
+        val langIndex : Int = listItems.indexOf(countriesMap[currentLang])
 
         // crea un AlertDialog
         val mBuilder = AlertDialog.Builder(this@MainActivity)
