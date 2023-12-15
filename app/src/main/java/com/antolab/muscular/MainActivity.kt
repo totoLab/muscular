@@ -17,6 +17,12 @@ import android.content.res.Configuration            //importazione della Classe:
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Load saved language preference or set default to "it"
+        val currentLanguage = loadLocate()
+        setLocate(currentLanguage)
+
+
         setContentView(R.layout.activity_main)
 
         val nav_button_stats : Button = findViewById<Button>(R.id.nav_button_stats)
@@ -115,12 +121,9 @@ class MainActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    private fun loadLocate() {
+    private fun loadLocate(): String {
         val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        val language = sharedPreferences.getString("My_Lang", "")
-        if (language != "") {
-            setLocate(language!!)
-        }
+        return sharedPreferences.getString("My_Lang", "it") ?: "it"
     }
-
 }
+
