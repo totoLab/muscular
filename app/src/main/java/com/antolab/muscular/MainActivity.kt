@@ -76,36 +76,51 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showChangeLang() {
-//crea un arraycon le lingue
-        val listItmes = arrayOf("English", "Español", "Français", "Italiano", "German")
-        //crea un AlertDialog
+        val countriesMap = mapOf(
+            "en" to "English",
+            "es" to "Español",
+            "fr" to "Français",
+            "it" to "Italiano",
+            "de" to "Deutsch"
+            // Add more countries as needed
+        )
+
+        val listItems = countriesMap.values.toTypedArray()
+
+        // ottieni la lingua corrente
+        val currentLang = loadLocate()
+        val langIndex : Int = listItems.indexOf(countriesMap.get(currentLang))
+
+        // crea un AlertDialog
         val mBuilder = AlertDialog.Builder(this@MainActivity)
         mBuilder.setTitle(R.string.ad_title)
-        mBuilder.setSingleChoiceItems(listItmes, -1) { dialog, which ->
+
+        mBuilder.setSingleChoiceItems(listItems, langIndex) { dialog, which ->
             when (which) {
                 0 -> {
-                    setLocate("en") //English
+                    setLocate("en") // English
                     recreate()
                 }
                 1 -> {
-                    setLocate("es") //Español
+                    setLocate("es") // Español
                     recreate()
                 }
                 2 -> {
-                    setLocate("fr") //Français
+                    setLocate("fr") // Français
                     recreate()
                 }
                 3 -> {
-                    setLocate("it") //Italiano
+                    setLocate("it") // Italiano
                     recreate()
                 }
                 4 -> {
-                    setLocate("de") //Tedesco
+                    setLocate("de") // Tedesco
                     recreate()
                 }
             }
             dialog.dismiss()
         }
+
         val mDialog = mBuilder.create()
         mDialog.show()
     }
