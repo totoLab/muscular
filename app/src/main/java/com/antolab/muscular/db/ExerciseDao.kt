@@ -11,6 +11,9 @@ interface ExerciseDao {
     @Query("SELECT * FROM exercises")
     suspend fun getAllExercises(): List<ExerciseEntity>
 
+    @Query("SELECT COUNT(*) FROM exercises")
+    suspend fun getCount(): Int
+
     @Delete
     suspend fun delete(exercise: ExerciseEntity)
 }

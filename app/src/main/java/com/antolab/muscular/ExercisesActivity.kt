@@ -21,14 +21,11 @@ class ExercisesActivity : AppCompatActivity() {
     private val dbPath = "exercises.json"
     private lateinit var exerciseDatabase: ExerciseDatabase
     private lateinit var exerciseDao: ExerciseDao
-    private var isDbEmpty = false
-    private val TESTING = false
+    private var TESTING = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercises)
-        val scrollView = findViewById<ScrollView>(R.id.scrollView) ?: return // TODO remove unused
-        val container = findViewById<LinearLayout>(R.id.container) ?: return
 
         try {
             exerciseDatabase = Room.databaseBuilder(
@@ -39,20 +36,25 @@ class ExercisesActivity : AppCompatActivity() {
 
             exerciseDao = exerciseDatabase.exerciseDao()
             MainScope().launch {
-                if (TESTING && exerciseDao.getAllExercises().isEmpty()) prepopulation()
+                if (TESTING && exerciseDao.getCount() == 0) prepopulation()
             }
         } catch (e: Exception) {
             Log.e("RoomDatabase", "Error creating database", e)
-            isDbEmpty = true
         }
+    }
 
-        if (isDbEmpty) {
-            val empty = findViewById<TextView>(R.id.exercices_default_empty)
-            empty.visibility = View.VISIBLE;
-            return
-        } else {
-            // add exercises dynamically
-            MainScope().launch {
+    override fun onStart() {
+        super.onStart()
+
+        val container = findViewById<LinearLayout>(R.id.container) ?: return
+
+        MainScope().launch {
+            if (exerciseDao.getCount() == 0) {
+                val empty = findViewById<TextView>(R.id.exercices_default_empty)
+                empty.visibility = View.VISIBLE;
+                return@launch
+            } else {
+                // add exercises dynamically
                 for (exercise in exerciseDao.getAllExercises()) {
                     val adding_outcome: Boolean = showExercise(container, exercise)
                     Log.d("exerciseLoading", "$exercise was ${if (adding_outcome) "" else "not"} added to the scroll view")
