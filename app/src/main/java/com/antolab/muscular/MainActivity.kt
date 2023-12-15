@@ -18,10 +18,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Load saved language preference or set default to "it"
-        val currentLanguage = loadLocate()
-        setLocate(currentLanguage)
 
+        val currentLanguage = Locale.getDefault().language
+        setLocate(currentLanguage)
 
         setContentView(R.layout.activity_main)
 
@@ -136,9 +135,9 @@ class MainActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    private fun loadLocate(): String {
+    private fun loadLocate(): String? {
         val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
-        return sharedPreferences.getString("My_Lang", "it") ?: "it"
+        return sharedPreferences.getString("My_Lang", "")
     }
 }
 
