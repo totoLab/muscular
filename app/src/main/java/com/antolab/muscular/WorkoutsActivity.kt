@@ -1,5 +1,6 @@
 package com.antolab.muscular
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -71,6 +72,11 @@ class WorkoutsActivity : AppCompatActivity() {
                 appDao.deleteProgramme(programme)
                 Log.d("exerciseDeletion", "Deleted $programme from the list.}")
             }
+        }
+
+        programmeElement.setOnClickListener {
+            val intent : Intent = Intent(this, WorkoutActivity::class.java)
+            startActivity(intent)
         }
 
         container.addView(programmeElement)
