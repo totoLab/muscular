@@ -1,8 +1,6 @@
 package com.antolab.muscular
 
 import android.app.*
-import android.content.Context
-import android.content.pm.PackageManager
 import android.os.*
 import android.util.*
 import android.view.*
@@ -18,8 +16,8 @@ import kotlinx.coroutines.*
 import com.antolab.muscular.db.*
 
 class ExercisesActivity : AppCompatActivity() {
-    private lateinit var exerciseDatabase: ExerciseDatabase
-    private lateinit var exerciseDao: ExerciseDao
+    private lateinit var appDatabase: AppDatabase
+    private lateinit var appDao: AppDao
     private var TESTING = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,15 +25,20 @@ class ExercisesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_exercises)
 
         try {
-            exerciseDatabase = Room.databaseBuilder(
+            appDatabase = Room.databaseBuilder(
                 applicationContext,
-                ExerciseDatabase::class.java,
-                "exercise_database"
+                AppDatabase::class.java,
+                "app_database"
             ).build()
 
-            exerciseDao = exerciseDatabase.exerciseDao()
-            MainScope().launch {
-                if (TESTING && exerciseDao.getCount() == 0) prepopulation()
+            appDao = appDatabase.appDao()
+
+            val button_add : Button = findViewById(R.id.button_exercise_new)
+            button_add.setOnClickListener {
+                MainScope().launch {
+                    if (appDao.getCount() == 0) prepopulation()
+                    else Toast.makeText(this@ExercisesActivity, "DB is not empty", Toast.LENGTH_LONG).show()
+                }
             }
         } catch (e: Exception) {
             Log.e("RoomDatabase", "Error creating database", e)
@@ -48,13 +51,13 @@ class ExercisesActivity : AppCompatActivity() {
         val container = findViewById<LinearLayout>(R.id.container) ?: return
 
         MainScope().launch {
-            if (exerciseDao.getCount() == 0) {
+            if (appDao.getCount() == 0) {
                 val empty = findViewById<TextView>(R.id.exercices_default_empty)
                 empty.visibility = View.VISIBLE;
                 return@launch
             } else {
                 // add exercises dynamically
-                for (exercise in exerciseDao.getAllExercises()) {
+                for (exercise in appDao.getAllExercises()) {
                     val adding_outcome: Boolean = showExercise(container, exercise)
                     Log.d("exerciseLoading", "$exercise was ${if (adding_outcome) "" else "not"} added to the scroll view")
                 }
@@ -84,7 +87,7 @@ class ExercisesActivity : AppCompatActivity() {
         deleteButton.setOnClickListener {
             container.removeView(exerciseElement)
             MainScope().launch {
-                exerciseDao.delete(exercise)
+                appDao.delete(exercise)
                 Log.d("exerciseDeletion", "Deleted $exercise from the list.}")
             }
         }
@@ -143,9 +146,9 @@ class ExercisesActivity : AppCompatActivity() {
                     description = exercise.description,
                     image = exercise.name
                 )
-                exerciseDao.insert(exerciseEntity)
+                appDao.insert(exerciseEntity)
             }
-            val allExercises = exerciseDao.getAllExercises()
+            val allExercises = appDao.getAllExercises()
             Log.d("prepopulation", allExercises.toString())
         }
     }

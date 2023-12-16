@@ -3,7 +3,7 @@ package com.antolab.muscular.db
 import androidx.room.*
 
 @Dao
-interface ExerciseDao {
+interface AppDao {
 
     @Insert
     suspend fun insert(exercise: ExerciseEntity)
