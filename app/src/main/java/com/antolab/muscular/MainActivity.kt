@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         val navButtonWorkouts : Button = findViewById(R.id.nav_button_workouts)
         navButtonWorkouts.setOnClickListener {
-            val intentWorkouts = Intent(this, WorkoutActivity::class.java)
+            val intentWorkouts = Intent(this, WorkoutsActivity::class.java)
             startActivity(intentWorkouts)
         }
 

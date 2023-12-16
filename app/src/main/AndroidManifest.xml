@@ -22,7 +22,7 @@
             android:name=".ExercisesActivity"
             android:exported="false" />
         <activity
-            android:name=".WorkoutActivity"
+            android:name=".WorkoutsActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
