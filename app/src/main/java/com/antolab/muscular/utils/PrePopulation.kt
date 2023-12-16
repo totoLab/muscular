@@ -22,10 +22,11 @@ class PrePopulation(private val context: Context) {
         val database = MyApplication.appDatabase
         appDao = database.appDao()
     }
-    suspend fun prepopulation() {
+
+    suspend fun exercisesPrepopulation() {
         withContext(Dispatchers.IO) {
             val dbPath = "exercises.json"
-            val oldDb : MutableMap<String, Exercise> = readJsonFromFile(dbPath)
+            val oldDb : MutableMap<String, Exercise> = readJsonFromFileExercise(dbPath)
             Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
             for (exerciseEntry in oldDb) {
                 var exercise = exerciseEntry.value
@@ -47,7 +48,7 @@ class PrePopulation(private val context: Context) {
         @SerializedName("image") val image: String
     )
 
-    private fun readJsonFromFile(fileName: String): MutableMap<String, Exercise> {
+    private fun readJsonFromFileExercise(fileName: String): MutableMap<String, Exercise> {
         val jsonString = StringBuilder()
         try {
             // Open the file input stream
@@ -65,6 +66,48 @@ class PrePopulation(private val context: Context) {
             e.printStackTrace()
         }
         return Gson().fromJson(jsonString.toString(), object : TypeToken<MutableMap<String, Exercise>>() {}.type)
+            ?: mutableMapOf()
+    }
+
+    suspend fun programmesPrepopulation() {
+        withContext(Dispatchers.IO) {
+            val dbPath = "programmes.json"
+            val oldDb : MutableMap<String, Programme> = readJsonFromFileProgramme(dbPath)
+            Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
+            for (exerciseEntry in oldDb) {
+                var exercise = exerciseEntry.value
+                var exerciseEntity = ProgrammeEntity(
+                    name = exercise.name
+                )
+                appDao.insertProgramme(exerciseEntity)
+            }
+            val allExercises = appDao.getAllProgrammes()
+            Log.d("prepopulation", allExercises.toString())
+        }
+    }
+
+    data class Programme(
+        @SerializedName("name") val name: String,
+    )
+
+    private fun readJsonFromFileProgramme(fileName: String): MutableMap<String, Programme> {
+        val jsonString = StringBuilder()
+        try {
+            // Open the file input stream
+            context.assets.open(fileName).use { inputStream ->
+                // Create a buffered reader
+                BufferedReader(InputStreamReader(inputStream)).use { reader ->
+                    // Read the file line by line
+                    var line: String?
+                    while (reader.readLine().also { line = it } != null) {
+                        jsonString.append(line)
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return Gson().fromJson(jsonString.toString(), object : TypeToken<MutableMap<String, Programme>>() {}.type)
             ?: mutableMapOf()
     }
 }

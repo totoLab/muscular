@@ -20,12 +20,12 @@ class ExercisesActivity : AppCompatActivity() {
 
         appDao = database.appDao()
 
-        val button_add : Button = findViewById(R.id.button_exercise_new)
-        button_add.setOnClickListener {
+        val buttonAdd : Button = findViewById(R.id.button_exercise_new)
+        buttonAdd.setOnClickListener {
             MainScope().launch {
                 if (appDao.getExercisesCount() == 0) {
                     val instance = PrePopulation(this@ExercisesActivity)
-                    instance.prepopulation()
+                    instance.exercisesPrepopulation()
                 } else {
                     Toast.makeText(this@ExercisesActivity, "DB is not empty", Toast.LENGTH_LONG).show()
                 }

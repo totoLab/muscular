@@ -6,6 +6,18 @@ import androidx.room.*
 interface AppDao {
 
     @Insert
+    suspend fun insertProgramme(programme: ProgrammeEntity)
+
+    @Query("SELECT * FROM programme")
+    suspend fun getAllProgrammes(): List<ProgrammeEntity>
+
+    @Query("SELECT COUNT(*) FROM programme")
+    suspend fun getProgrammesCount(): Int
+
+    @Delete
+    suspend fun deleteProgramme(programme: ProgrammeEntity)
+
+    @Insert
     suspend fun insertExercise(exercise: ExerciseEntity)
 
     @Query("SELECT * FROM exercises")
