@@ -34,7 +34,7 @@ class PrePopulation(private val context: Context) {
                     description = exercise.description,
                     image = exercise.name
                 )
-                appDao.insert(exerciseEntity)
+                appDao.insertExercise(exerciseEntity)
             }
             val allExercises = appDao.getAllExercises()
             Log.d("prepopulation", allExercises.toString())

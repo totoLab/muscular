@@ -23,7 +23,7 @@ class ExercisesActivity : AppCompatActivity() {
         val button_add : Button = findViewById(R.id.button_exercise_new)
         button_add.setOnClickListener {
             MainScope().launch {
-                if (appDao.getCount() == 0) {
+                if (appDao.getExercisesCount() == 0) {
                     val instance = PrePopulation(this@ExercisesActivity)
                     instance.prepopulation()
                 } else {
@@ -39,7 +39,7 @@ class ExercisesActivity : AppCompatActivity() {
         val container = findViewById<LinearLayout>(R.id.container) ?: return
 
         MainScope().launch {
-            if (appDao.getCount() == 0) {
+            if (appDao.getExercisesCount() == 0) {
                 val empty = findViewById<TextView>(R.id.exercices_default_empty)
                 empty.visibility = View.VISIBLE;
                 return@launch
@@ -75,7 +75,7 @@ class ExercisesActivity : AppCompatActivity() {
         deleteButton.setOnClickListener {
             container.removeView(exerciseElement)
             MainScope().launch {
-                appDao.delete(exercise)
+                appDao.deleteExercise(exercise)
                 Log.d("exerciseDeletion", "Deleted $exercise from the list.}")
             }
         }

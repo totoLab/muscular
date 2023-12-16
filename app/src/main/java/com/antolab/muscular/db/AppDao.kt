@@ -6,14 +6,14 @@ import androidx.room.*
 interface AppDao {
 
     @Insert
-    suspend fun insert(exercise: ExerciseEntity)
+    suspend fun insertExercise(exercise: ExerciseEntity)
 
     @Query("SELECT * FROM exercises")
     suspend fun getAllExercises(): List<ExerciseEntity>
 
     @Query("SELECT COUNT(*) FROM exercises")
-    suspend fun getCount(): Int
+    suspend fun getExercisesCount(): Int
 
     @Delete
-    suspend fun delete(exercise: ExerciseEntity)
+    suspend fun deleteExercise(exercise: ExerciseEntity)
 }
