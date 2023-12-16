@@ -11,7 +11,6 @@ import com.antolab.muscular.db.*
 import com.antolab.muscular.utils.*
 class ExercisesActivity : AppCompatActivity() {
     private lateinit var appDao : AppDao
-    private var TESTING = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

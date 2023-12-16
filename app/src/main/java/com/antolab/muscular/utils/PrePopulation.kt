@@ -16,7 +16,7 @@ import com.antolab.muscular.MyApplication
 
 class PrePopulation(private val context: Context) {
 
-    val appDao: AppDao
+    private val appDao: AppDao
 
     init {
         val database = MyApplication.appDatabase
