@@ -6,42 +6,31 @@ import android.util.*
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
-import com.google.gson.reflect.TypeToken
-import java.io.*
-import java.util.*
-import androidx.room.*
 import kotlinx.coroutines.*
 import com.antolab.muscular.db.*
-
+import com.antolab.muscular.utils.*
 class ExercisesActivity : AppCompatActivity() {
-    private lateinit var appDatabase: AppDatabase
-    private lateinit var appDao: AppDao
+    private lateinit var appDao : AppDao
     private var TESTING = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercises)
 
-        try {
-            appDatabase = Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java,
-                "app_database"
-            ).build()
+        val database = MyApplication.appDatabase
 
-            appDao = appDatabase.appDao()
+        appDao = database.appDao()
 
-            val button_add : Button = findViewById(R.id.button_exercise_new)
-            button_add.setOnClickListener {
-                MainScope().launch {
-                    if (appDao.getCount() == 0) prepopulation()
-                    else Toast.makeText(this@ExercisesActivity, "DB is not empty", Toast.LENGTH_LONG).show()
+        val button_add : Button = findViewById(R.id.button_exercise_new)
+        button_add.setOnClickListener {
+            MainScope().launch {
+                if (appDao.getCount() == 0) {
+                    val instance = PrePopulation(this@ExercisesActivity)
+                    instance.prepopulation()
+                } else {
+                    Toast.makeText(this@ExercisesActivity, "DB is not empty", Toast.LENGTH_LONG).show()
                 }
             }
-        } catch (e: Exception) {
-            Log.e("RoomDatabase", "Error creating database", e)
         }
     }
 
@@ -132,52 +121,6 @@ class ExercisesActivity : AppCompatActivity() {
 
     private fun imageId(imagePath: String) : Int {
         return resources.getIdentifier(imagePath, "drawable", packageName)
-    }
-
-    private suspend fun prepopulation() {
-        withContext(Dispatchers.IO) {
-            val dbPath = "exercises.json"
-            val oldDb : MutableMap<String, Exercise> = readJsonFromFile(dbPath)
-            Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
-            for (exerciseEntry in oldDb) {
-                var exercise = exerciseEntry.value
-                var exerciseEntity = ExerciseEntity(
-                    name = exercise.name,
-                    description = exercise.description,
-                    image = exercise.name
-                )
-                appDao.insert(exerciseEntity)
-            }
-            val allExercises = appDao.getAllExercises()
-            Log.d("prepopulation", allExercises.toString())
-        }
-    }
-
-    data class Exercise(
-        @SerializedName("name") val name: String,
-        @SerializedName("description") val description: String,
-        @SerializedName("image") val image: String
-    )
-
-    private fun readJsonFromFile(fileName: String): MutableMap<String, Exercise> {
-        val jsonString = StringBuilder()
-        try {
-            // Open the file input stream
-            assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
-                BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
-                    var line: String?
-                    while (reader.readLine().also { line = it } != null) {
-                        jsonString.append(line)
-                    }
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return Gson().fromJson(jsonString.toString(), object : TypeToken<MutableMap<String, Exercise>>() {}.type)
-            ?: mutableMapOf()
     }
 
 }
