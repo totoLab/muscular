@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name" translatable="false">Muscular</string>
     <string name="tab_stats">Statistiken</string>
     <string name="tab_workouts">Karten</string>
     <string name="tab_exercises">Übungen</string>
@@ -13,6 +14,9 @@
     <string name="exercises_default_empty">Die Übungsdatenbank ist leer.</string>
     <string name="button_exercise_new">hinzufügen</string>
     <string name="button_modify">Bearbeiten</string>
+    <string name="default_notification_channel_id" translatable="false">channel_id</string>
     <string name="bn_name">Sprache einstellen</string>
     <string name="ad_title">Wähle deine Sprache</string>
+    <string name="button_programme_new">Karte hinzufügen</string>
+    <string name="programmes_default_empty">Die Kartendatenbank ist leer.</string>
 </resources>
