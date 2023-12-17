@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.antolab.muscular.utils.PrePopulation
 import kotlinx.coroutines.*
 import com.antolab.muscular.db.*
@@ -54,9 +55,15 @@ class WorkoutsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        val container = findViewById<LinearLayout>(R.id.container) ?: return
+        container.removeAllViews()
+    }
+
     private fun showProgramme(container: LinearLayout, programme: ProgrammeEntity): Boolean {
         // Inflate the exercise template and make it visible
-        val programmeElement : RelativeLayout = layoutInflater.inflate(R.layout.programme_template, null) as RelativeLayout
+        val programmeElement : ConstraintLayout = layoutInflater.inflate(R.layout.programme_template, null) as ConstraintLayout
         programmeElement.visibility = View.VISIBLE
 
         // Setup information about the exercise
@@ -74,7 +81,7 @@ class WorkoutsActivity : AppCompatActivity() {
             }
         }
 
-        programmeElement.setOnClickListener {
+        textViewProgrammeName.setOnClickListener {
             val intent : Intent = Intent(this, WorkoutActivity::class.java)
             startActivity(intent)
         }
