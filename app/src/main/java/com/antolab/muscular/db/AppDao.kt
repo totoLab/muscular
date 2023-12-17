@@ -6,6 +6,26 @@ import androidx.room.*
 interface AppDao {
 
     @Insert
+    suspend fun insertPE(programme: ProgrammeEntity, exercise: ExerciseEntity)
+
+    @Query("""
+        SELECT Ex.*
+        FROM exercises AS Ex
+        WHERE Ex.id IN (
+            SELECT exerciseId
+            FROM pe
+            WHERE programmeId = :programmeName
+            )
+    """)
+    suspend fun getAllExerciseOfProgramme(programmeName: String): List<ExerciseEntity>
+
+    @Query("SELECT COUNT(*) FROM pe")
+    suspend fun getRelationshipsCount(): Int
+
+    @Delete
+    suspend fun deletePE(programmeEntity: ProgrammeEntity, exerciseEntity: ExerciseEntity)
+
+    @Insert
     suspend fun insertProgramme(programme: ProgrammeEntity)
 
     @Query("SELECT * FROM programme")
