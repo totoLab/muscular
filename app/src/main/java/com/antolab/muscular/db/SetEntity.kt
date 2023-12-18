@@ -3,7 +3,7 @@ package com.antolab.muscular.db
 import androidx.room.*
 
 @Entity(
-    tableName = "set",
+    tableName = "sett",
     foreignKeys = [
         ForeignKey(
             entity = ExerciseEntity::class,

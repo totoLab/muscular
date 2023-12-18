@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.antolab.muscular.utils.PrePopulation
 import kotlinx.coroutines.*
 import com.antolab.muscular.db.*
+import com.antolab.muscular.utils.*
 
 class WorkoutsActivity : AppCompatActivity() {
     private lateinit var appDao: AppDao
@@ -27,11 +28,16 @@ class WorkoutsActivity : AppCompatActivity() {
             MainScope().launch {
                 if (appDao.getProgrammesCount() == 0) {
                     val instance = PrePopulation(this@WorkoutsActivity)
-                    instance.programmesPrepopulation() // TODO call prepolutation with param for programme
+                    instance.programmesPrepopulation()
+                    instance.pePrepopulation()
                 } else {
                     Toast.makeText(this@WorkoutsActivity, "DB is not empty", Toast.LENGTH_LONG).show()
                 }
             }
+            MainScope().launch {
+
+            }
+
         }
     }
 
@@ -83,6 +89,7 @@ class WorkoutsActivity : AppCompatActivity() {
 
         textViewProgrammeName.setOnClickListener {
             val intent : Intent = Intent(this, WorkoutActivity::class.java)
+            intent.putExtra("programmeName", programme.name);
             startActivity(intent)
         }
 
