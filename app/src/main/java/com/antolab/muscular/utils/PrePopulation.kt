@@ -31,6 +31,7 @@ class PrePopulation(private val context: Context) {
             for (exerciseEntry in oldDb) {
                 var exercise = exerciseEntry.value
                 var exerciseEntity = ExerciseEntity(
+                    id = 0,
                     name = exercise.name,
                     description = exercise.description,
                     image = exercise.name

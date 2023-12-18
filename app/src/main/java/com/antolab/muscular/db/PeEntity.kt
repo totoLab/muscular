@@ -1,6 +1,8 @@
 package com.antolab.muscular.db
 
 import androidx.room.*
+import com.antolab.muscular.utils.*
+import kotlin.time.Duration
 
 @Entity(
     tableName = "pe",
@@ -9,7 +11,7 @@ import androidx.room.*
             entity = ProgrammeEntity::class,
             parentColumns = ["name"],
             childColumns = ["programmeId"],
-            onDelete = ForeignKey.CASCADE // Define the action on delete if needed
+            onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = ExerciseEntity::class,
@@ -17,12 +19,11 @@ import androidx.room.*
             childColumns = ["exerciseId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    primaryKeys = [ "programmeId", "exerciseId" ]
 )
 data class PeEntity(
-    @PrimaryKey val programmeId: String,
-    val exerciseId: Int,
-    val lastWeight: Int,
-    val lastReps: Int,
-    val restTimer: Int // TODO use Duration with TypeConverters in utils.Converters
+    val programmeId: String,
+    val exerciseId: Long,
+    val restTimer: Int // TODO use TypeConverters in utils.Converters
 )
