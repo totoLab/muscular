@@ -64,22 +64,29 @@ class WorkoutActivity : AppCompatActivity() {
         // sets
         val exerciseElement : TableLayout = exerciseWrapper.findViewById(R.id.exercise_instance)
         val sets : List<SetEntity> = appDao.getAllSetsOfExercise(exercise.id)
+
+        showSet(exerciseElement, "ID", "Reps", "Weight")
+
         for (set in sets) {
-            val setElement : TableRow = layoutInflater.inflate(R.layout.set_template, null) as TableRow
-
-            val idView = setElement.findViewById<TextView>(R.id.id_number)
-            idView.text = set.id.toString()
-
-            val repsView = setElement.findViewById<TextView>(R.id.id_number)
-            repsView.text = set.reps.toString()
-
-            val weightView = setElement.findViewById<TextView>(R.id.id_number)
-            weightView.text = set.weight.toString()
-
-            exerciseElement.addView(setElement)
+            showSet(exerciseElement, set.id.toString(), set.reps.toString(), set.weight.toString())
         }
 
         container.addView(exerciseWrapper)
         return true
+    }
+
+    private suspend fun showSet(exerciseElement: TableLayout, id: String, reps: String, weight: String) {
+        val setElement : TableRow = layoutInflater.inflate(R.layout.set_template, null) as TableRow
+
+        val idView = setElement.findViewById<TextView>(R.id.id_number)
+        idView.text = id
+
+        val repsView = setElement.findViewById<TextView>(R.id.reps_number)
+        repsView.text = reps
+
+        val weightView = setElement.findViewById<TextView>(R.id.weight_number)
+        weightView.text = weight
+
+        exerciseElement.addView(setElement)
     }
 }
