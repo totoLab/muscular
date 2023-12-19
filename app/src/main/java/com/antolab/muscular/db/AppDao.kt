@@ -5,8 +5,8 @@ import androidx.room.*
 @Dao
 interface AppDao {
 
-    @Insert
-    suspend fun insertPE(programme: ProgrammeEntity, exercise: ExerciseEntity)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertPE(peEntity: PeEntity)
 
     @Query("""
         SELECT Ex.*
@@ -31,9 +31,9 @@ interface AppDao {
     suspend fun getExerciseOfProgrammeCount(programmeName: String): Int
 
     @Query("SELECT * FROM programme WHERE name = :programmeId")
-    suspend fun getProgramme(programmeId: String): ProgrammeEntity
+    suspend fun getProgramme(programmeId: String): ProgrammeEntity?
     @Query("SELECT * FROM exercises WHERE id = :exerciseId")
-    suspend fun getExercise(exerciseId: Long): ExerciseEntity
+    suspend fun getExercise(exerciseId: Long): ExerciseEntity?
 
     @Query("SELECT COUNT(*) FROM pe")
     suspend fun getRelationshipsCount(): Int
@@ -41,10 +41,12 @@ interface AppDao {
     @Delete
     suspend fun deletePE(programmeEntity: ProgrammeEntity, exerciseEntity: ExerciseEntity)
 
-    @Insert
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSet(setEntity: SetEntity)
 
-    @Delete
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun deleteSet(setEntity: SetEntity)
 
     @Query("SELECT * FROM sett")
@@ -53,7 +55,8 @@ interface AppDao {
     @Query("SELECT * FROM sett WHERE exerciseId = :exerciseId")
     suspend fun getAllSetsOfExercise(exerciseId: Long) : List<SetEntity>
 
-    @Insert
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertProgramme(programme: ProgrammeEntity)
 
     @Query("SELECT * FROM programme")
@@ -65,7 +68,8 @@ interface AppDao {
     @Delete
     suspend fun deleteProgramme(programme: ProgrammeEntity)
 
-    @Insert
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertExercise(exercise: ExerciseEntity)
 
     @Query("SELECT * FROM exercises")
