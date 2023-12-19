@@ -1,8 +1,6 @@
 package com.antolab.muscular.db
 
 import androidx.room.*
-import com.antolab.muscular.utils.*
-import kotlin.time.Duration
 
 @Entity(
     tableName = "pe",
@@ -25,5 +23,5 @@ import kotlin.time.Duration
 data class PeEntity(
     val programmeId: String,
     val exerciseId: Long,
-    val restTimer: Int // TODO use TypeConverters in utils.Converters
+    val restTimer: Long // TODO use TypeConverters in utils.Converters
 )
