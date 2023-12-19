@@ -1,10 +1,12 @@
 package com.antolab.muscular
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.antolab.muscular.utils.PrePopulation
 import kotlinx.coroutines.*
 import com.antolab.muscular.db.*
@@ -22,10 +24,11 @@ class WorkoutsActivity : AppCompatActivity() {
 
         val button_add : Button = findViewById(R.id.button_programme_new)
         button_add.setOnClickListener {
-            MainScope().launch {
+            GlobalScope.launch {
                 if (appDao.getProgrammesCount() == 0) {
                     val instance = PrePopulation(this@WorkoutsActivity)
-                    instance.programmesPrepopulation() // TODO call prepolutation with param for programme
+                    instance.programmesPrepopulation()
+                    instance.pePrepopulation()
                 } else {
                     Toast.makeText(this@WorkoutsActivity, "DB is not empty", Toast.LENGTH_LONG).show()
                 }
@@ -53,9 +56,15 @@ class WorkoutsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        val container = findViewById<LinearLayout>(R.id.container) ?: return
+        container.removeAllViews()
+    }
+
     private fun showProgramme(container: LinearLayout, programme: ProgrammeEntity): Boolean {
         // Inflate the exercise template and make it visible
-        val programmeElement : RelativeLayout = layoutInflater.inflate(R.layout.programme_template, null) as RelativeLayout
+        val programmeElement : ConstraintLayout = layoutInflater.inflate(R.layout.programme_template, null) as ConstraintLayout
         programmeElement.visibility = View.VISIBLE
 
         // Setup information about the exercise
@@ -71,6 +80,12 @@ class WorkoutsActivity : AppCompatActivity() {
                 appDao.deleteProgramme(programme)
                 Log.d("exerciseDeletion", "Deleted $programme from the list.}")
             }
+        }
+
+        textViewProgrammeName.setOnClickListener {
+            val intent : Intent = Intent(this, WorkoutActivity::class.java)
+            intent.putExtra("programmeName", programme.name);
+            startActivity(intent)
         }
 
         container.addView(programmeElement)

@@ -2,12 +2,26 @@ package com.antolab.muscular.db
 
 import androidx.room.*
 
-@Entity(tableName = "pe")
+@Entity(
+    tableName = "pe",
+    foreignKeys = [
+        ForeignKey(
+            entity = ProgrammeEntity::class,
+            parentColumns = ["name"],
+            childColumns = ["programmeId"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = ExerciseEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["exerciseId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    primaryKeys = [ "programmeId", "exerciseId" ]
+)
 data class PeEntity(
-    @PrimaryKey
-    val programmeId: Int,
-    val exerciseId: Int,
-    val lastWeight: Int,
-    val lastReps: Int,
-    val restTimer: Int // TODO use Duration with TypeConverters in utils.Converters
+    val programmeId: String,
+    val exerciseId: Long,
+    val restTimer: Long // TODO use TypeConverters in utils.Converters
 )

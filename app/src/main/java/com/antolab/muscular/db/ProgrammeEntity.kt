@@ -4,6 +4,5 @@ import androidx.room.*
 
 @Entity(tableName = "programme")
 data class ProgrammeEntity(
-    @PrimaryKey
-    val name: String
+    @PrimaryKey val name: String
 )
