@@ -32,6 +32,7 @@
         <activity
             android:name=".WorkoutActivity"
             android:exported="false" />
+
         <activity
             android:name=".StatsActivity"
             android:exported="false" />
