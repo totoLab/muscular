@@ -2,35 +2,32 @@
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="0dp"
     android:layout_height="match_parent"
-    android:background="@drawable/border">
+    android:background="@drawable/border1">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@drawable/border">
+        android:background="@drawable/border1">
 
     <TextView
         android:id="@+id/id_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:layout_weight="1"
-        android:background="@drawable/border" ></TextView>
+        android:layout_weight="1" ></TextView>
 
     <TextView
         android:id="@+id/reps_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:layout_weight="1"
-        android:background="@drawable/border" ></TextView>
+        android:layout_weight="1" ></TextView>
 
     <TextView
         android:id="@+id/weight_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:layout_weight="1"
-        android:background="@drawable/border" ></TextView>
+        android:layout_weight="1" ></TextView>
     </LinearLayout>
 </TableRow>
