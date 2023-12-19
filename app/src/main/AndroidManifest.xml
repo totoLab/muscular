@@ -19,12 +19,19 @@
         android:supportsRtl="true"
         android:theme="@style/MuscularTheme"
         tools:targetApi="31">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" > <!-- Set to true if needed -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".WorkoutActivity"
             android:exported="false" />
-
-        <receiver android:name=".NotificationReceiver" />
-
         <activity
             android:name=".StatsActivity"
             android:exported="false" />
@@ -34,15 +41,21 @@
         <activity
             android:name=".WorkoutsActivity"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+        <receiver
+            android:name=".NotificationReceiver"
+            android:enabled="true"
+            android:exported="false">
+
+
+        </receiver>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+         </application>
+
+
+
 
 </manifest>
