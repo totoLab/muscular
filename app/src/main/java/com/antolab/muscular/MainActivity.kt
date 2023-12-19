@@ -1,77 +1,62 @@
 package com.antolab.muscular
-
-import android.app.AlarmManager
-import android.app.PendingIntent
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Button
-import java.util.Calendar
-import androidx.appcompat.app.AlertDialog           //importazione della Classe: AlertDialog
-import java.util.*
-import android.app.Activity
-import android.content.Context                      //importazione della Classe: Context
-import android.content.res.Configuration            //importazione della Classe: Configuration
-
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-        val currentLanguage = Locale.getDefault().language
-        setLocate(currentLanguage)
-
         setContentView(R.layout.activity_main)
 
-        val navButtonStats : Button = findViewById(R.id.nav_button_stats)
+
+
+        val navButtonStats: Button = findViewById(R.id.nav_button_stats)
         navButtonStats.setOnClickListener {
-            val intentStats = Intent(this, StatsActivity::class.java)
-            startActivity(intentStats)
+            startNewActivity(StatsActivity::class.java)
         }
 
-        val navButtonWorkouts : Button = findViewById(R.id.nav_button_workouts)
+        val navButtonWorkouts: Button = findViewById(R.id.nav_button_workouts)
         navButtonWorkouts.setOnClickListener {
-            val intentWorkouts = Intent(this, WorkoutsActivity::class.java)
-            startActivity(intentWorkouts)
+            startNewActivity(WorkoutsActivity::class.java)
         }
 
-        val navButtonExercises : Button = findViewById(R.id.nav_button_exercises)
+        val navButtonExercises: Button = findViewById(R.id.nav_button_exercises)
         navButtonExercises.setOnClickListener {
-            val intentExercises = Intent(this, ExercisesActivity::class.java)
-            startActivity(intentExercises)
+            startNewActivity(ExercisesActivity::class.java)
         }
 
 
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, NotificationReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        calendar.add(Calendar.MINUTE, 1) // Invia il broadcast ogni minuto
-
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            60 * 1000, // Ogni tre secondi in millisecondi
-            pendingIntent
-        )
-
-        // Set up language change dialog
         val langButton: Button = findViewById(R.id.bnLang)
         langButton.setOnClickListener {
             showChangeLang()
         }
 
-        // Load saved language preference
         loadLocate()
+
+        // esempio di notifica
+        val notificationHelper = NotificationHelper(this)
+        notificationHelper.sendCustomNotification("CM", "U cunnu e mammata")
+
+        //esempio di notifica periodica, con true invia anche una notifica all'avvio, altrimenti no
+        notificationHelper.sendPeriodicNotification(
+            "CZ",
+            "Cunnu e ziata",
+            60 * 1000,
+            true) // Ogni minuto in millisecondi
+    }
+
+
+    private fun startNewActivity(activityClass: Class<*>) {
+        val intent = Intent(this, activityClass)
+        startActivity(intent)
     }
 
     private fun showChangeLang() {
@@ -88,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
         // ottieni la lingua corrente
         val currentLang = loadLocate()
-        val langIndex : Int = listItems.indexOf(countriesMap[currentLang])
+        val langIndex: Int = listItems.indexOf(countriesMap[currentLang])
 
         // crea un AlertDialog
         val mBuilder = AlertDialog.Builder(this@MainActivity)
@@ -100,18 +85,22 @@ class MainActivity : AppCompatActivity() {
                     setLocate("en") // English
                     recreate()
                 }
+
                 1 -> {
                     setLocate("es") // Español
                     recreate()
                 }
+
                 2 -> {
                     setLocate("fr") // Français
                     recreate()
                 }
+
                 3 -> {
                     setLocate("it") // Italiano
                     recreate()
                 }
+
                 4 -> {
                     setLocate("de") // Tedesco
                     recreate()
@@ -122,6 +111,9 @@ class MainActivity : AppCompatActivity() {
 
         val mDialog = mBuilder.create()
         mDialog.show()
+
+
+
     }
 
     private fun setLocate(lang: String) {
@@ -139,5 +131,8 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         return sharedPreferences.getString("My_Lang", "")
     }
-}
 
+
+
+
+}
