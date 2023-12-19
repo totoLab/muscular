@@ -1,66 +1,26 @@
 package com.antolab.muscular
 
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.NotificationCompat
-import java.util.*
+import android.util.Log
 
 class NotificationReceiver : BroadcastReceiver() {
 
+    companion object {
+        const val EXTRA_TITLE = "extra_title"
+        const val EXTRA_CONTENT = "extra_content"
+    }
+
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (context != null) {
-            // Chiamata a showNotification per creare il canale di notifica
-            showNotification(context)
+        Log.d("NotificationReceiver", "Received notification broadcast")
 
-            val notificationIntent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(
-                context,
-                0,
-                notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
+        // Get title and content from the intent
+        val title = intent?.getStringExtra(EXTRA_TITLE) ?: "Default Title"
+        val content = intent?.getStringExtra(EXTRA_CONTENT) ?: "Default Content"
 
-            // Aggiungi questa parte per mostrare la notifica
-            val notification = NotificationCompat.Builder(context, "channel_id")
-                .setContentTitle("Fresh time!")
-                .setContentText("Ricordati di idratarti durante il tuo allenamento.")
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .build()
+        // Create an instance of NotificationHelper and show the notification
+        NotificationHelper(context!!).showNotification(title, content)
 
-            val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.notify(1, notification)
-        }
-    }
-
-    // Sposta la definizione di showNotification qui
-    private fun showNotification(context: Context) {
-        // Creare un canale di notifica solo se il dispositivo è su Android Oreo (API 26) o versioni successive
-        val channelId = "channel_id"
-        val channelName = "Channel Name"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(channelId, channelName, importance)
-
-        // Registrare il canale con il NotificationManager
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
-
-    fun setNotification(context: Context, notificationTime: Calendar) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, NotificationReceiver::class.java)
-        val pendingIntent =
-            PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        // Imposta l'orario desiderato per la notifica
-        alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime.timeInMillis, pendingIntent)
     }
 }
