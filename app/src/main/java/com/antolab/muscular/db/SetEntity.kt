@@ -4,18 +4,20 @@ import androidx.room.*
 
 @Entity(
     tableName = "sett",
+    indices = [Index(value = ["id", "exerciseId"], unique = true)],
     foreignKeys = [
         ForeignKey(
             entity = ExerciseEntity::class,
             parentColumns = ["id"],
             childColumns = ["exerciseId"],
             onDelete = ForeignKey.CASCADE
-        )],
-    primaryKeys = [ "id", "exerciseId" ]
-    )
+        )]
+)
 data class SetEntity(
-    val id: Long,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
     val exerciseId: Long,
     val reps: Int,
     val weight: Int
 )
+
