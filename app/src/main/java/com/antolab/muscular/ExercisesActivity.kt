@@ -22,7 +22,7 @@ class ExercisesActivity : AppCompatActivity() {
 
         val buttonAdd : Button = findViewById(R.id.button_exercise_new)
         buttonAdd.setOnClickListener {
-            MainScope().launch {
+            GlobalScope.launch {
                 if (appDao.getExercisesCount() == 0) {
                     val instance = PrePopulation(this@ExercisesActivity)
                     instance.exercisesPrepopulation()
