@@ -75,15 +75,16 @@ class PrePopulation(private val context: Context) {
             val dbPath = "programmes.json"
             val oldDb : MutableMap<String, Programme> = readJsonFromFileProgramme(dbPath)
             Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
-            for (exerciseEntry in oldDb) {
-                var exercise = exerciseEntry.value
-                var exerciseEntity = ProgrammeEntity(
-                    name = exercise.name
+            for (programmeEntry in oldDb) {
+                var programme = programmeEntry.value
+                Log.d("prepopulation", "Trying to add $programme")
+                var programmeEntity = ProgrammeEntity(
+                    name = programme.name
                 )
-                appDao.insertProgramme(exerciseEntity)
+                appDao.insertProgramme(programmeEntity)
             }
-            val allExercises = appDao.getAllProgrammes()
-            Log.d("prepopulation", allExercises.toString())
+            val allProgrammes = appDao.getAllProgrammes()
+            Log.d("prepopulation", allProgrammes.toString())
         }
     }
 
@@ -162,25 +163,30 @@ class PrePopulation(private val context: Context) {
     }
 
     suspend fun pePrepopulation() {
+        val tag="prepopulation"
         withContext(Dispatchers.IO) {
-            val dbPath = "sets.json"
+            val dbPath = "pe.json"
             val oldDb : MutableMap<String, PE> = readJsonFromFilePE(dbPath)
-            Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
+            Log.d(tag, "json DB loading: ${oldDb.toString()}")
             for (peEntry in oldDb) {
                 var pe = peEntry.value
-                var programmeEntity : ProgrammeEntity = appDao.getProgramme(pe.programmeId)
-                var exerciseEntity : ExerciseEntity = appDao.getExercise(pe.exerciseId)
-                appDao.insertPE(programmeEntity, exerciseEntity)
+                Log.d(tag, "Trying to add $pe")
+                var peEntity : PeEntity = PeEntity(
+                    programmeId = pe.programmeId,
+                    exerciseId = pe.exerciseId,
+                    restTimer = pe.restTimer
+                )
+                appDao.insertPE(peEntity)
             }
             val rel = appDao.getRelationshipsCount()
-            Log.d("prepopulation", rel.toString())
+            Log.d(tag, rel.toString())
         }
     }
 
     data class PE(
         @SerializedName("programmeId") val programmeId: String,
         @SerializedName("exerciseId") val exerciseId: Long,
-        @SerializedName("restTimer") val restTimer: Int
+        @SerializedName("restTimer") val restTimer: Long
     )
 
 

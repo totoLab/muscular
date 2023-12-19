@@ -1,0 +1,10 @@
+{
+  "1": {"programmeId": "Gambe", "exerciseId": 1, "restTimer": 60},
+  "2": {"programmeId": "Dorso e Tricipiti", "exerciseId": 2, "restTimer": 45},
+  "3": {"programmeId": "Petto e Spalle", "exerciseId": 3, "restTimer": 60},
+  "4": {"programmeId": "Petto e Spalle", "exerciseId": 4, "restTimer": 30},
+  "5": {"programmeId": "Cardio e Addominali", "exerciseId": 1, "restTimer": 45},
+  "6": {"programmeId": "Cardio e Addominali", "exerciseId": 3, "restTimer": 60},
+  "7": {"programmeId": "Gambe", "exerciseId": 2, "restTimer": 30},
+  "8": {"programmeId": "Gambe", "exerciseId": 4, "restTimer": 45}
+}

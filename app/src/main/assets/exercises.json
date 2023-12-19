@@ -1,14 +1,13 @@
 {
-    "1": {"name": "exercise1", "description": "exercise1", "image": "exercise1" },
-    "2": {"name": "exercise2", "description": "exercise2", "image": "exercise2" },
-    "3": {"name": "exercise3", "description": "exercise3", "image": "exercise3" },
-    "4": {"name": "exercise4", "description": "exercise4", "image": "exercise4" },
-    "5": {"name": "exercise5", "description": "exercise5", "image": "exercise5" },
-    "6": {"name": "exercise6", "description": "exercise6", "image": "exercise6" },
-    "7": {"name": "exercise7", "description": "exercise7", "image": "exercise7" },
-    "8": {"name": "exercise8", "description": "exercise8", "image": "exercise8" },
-    "9": {"name": "exercise9", "description": "exercise9", "image": "exercise9" },
-    "10": {"name": "exercise10", "description": "exercise10", "image": "exercise10" },
-    "11": {"name": "exercise11", "description": "exercise11", "image": "exercise11" }
-
+    "1": {"id": 1, "name": "exercise1", "description": "exercise1", "image": "exercise1"},
+    "2": {"id": 2, "name": "exercise2", "description": "exercise2", "image": "exercise2"},
+    "3": {"id": 3, "name": "exercise3", "description": "exercise3", "image": "exercise3"},
+    "4": {"id": 4, "name": "exercise4", "description": "exercise4", "image": "exercise4"},
+    "5": {"id": 5, "name": "exercise5", "description": "exercise5", "image": "exercise5"},
+    "6": {"id": 6, "name": "exercise6", "description": "exercise6", "image": "exercise6"},
+    "7": {"id": 7, "name": "exercise7", "description": "exercise7", "image": "exercise7"},
+    "8": {"id": 8, "name": "exercise8", "description": "exercise8", "image": "exercise8"},
+    "9": {"id": 9, "name": "exercise9", "description": "exercise9", "image": "exercise9"},
+    "10": {"id": 10, "name": "exercise10", "description": "exercise10", "image": "exercise10"},
+    "11": {"id": 11, "name": "exercise11", "description": "exercise11", "image": "exercise11"}
 }
