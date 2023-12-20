@@ -43,14 +43,13 @@ class MainActivity : AppCompatActivity() {
 
         // esempio di notifica
         val notificationHelper = NotificationHelper(this)
-        notificationHelper.sendCustomNotification("CM", "U cunnu e mammata")
 
         //esempio di notifica periodica, con true invia anche una notifica all'avvio, altrimenti no
         notificationHelper.sendPeriodicNotification(
-            "CZ",
-            "Cunnu e ziata",
-            60 * 1000,
-            true) // Ogni minuto in millisecondi
+            "Fresh Time!",
+            "Mantieniti idratato durante la tua giornata!",
+            60 * 60 * 1000,
+            false) // Ogni ora in millisecondi
     }
 
 
@@ -131,8 +130,6 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)
         return sharedPreferences.getString("My_Lang", "")
     }
-
-
 
 
 }

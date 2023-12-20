@@ -18,6 +18,7 @@ import com.antolab.muscular.db.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import android.os.CountDownTimer
+import android.widget.Button
 import es.dmoral.toasty.Toasty
 
 
@@ -28,10 +29,15 @@ import es.dmoral.toasty.Toasty
 class WorkoutActivity : AppCompatActivity() {
     private lateinit var appDao : AppDao
     private lateinit var currentProgramme : String
+    private lateinit var button: Button
+
+    var working = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workout)
+
+        button = findViewById(R.id.working) // Initialize the button
 
         val intent = intent
         if (intent == null) {
@@ -43,7 +49,19 @@ class WorkoutActivity : AppCompatActivity() {
             appDao = database.appDao()
         }
 
-
+        button.setOnClickListener {
+            if (working) {
+                // Se la variabile è true, la imposta a false e cambia il colore del pulsante a verde
+                working = false
+                button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light))
+                button.setText("Inizia allenamento")
+            } else {
+                // Se la variabile è false, la imposta a true e cambia il colore del pulsante a rosso
+                working = true
+                button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light))
+                button.setText("Ferma allenamento")
+            }
+        }
     }
 
     override fun onStart() {
@@ -116,6 +134,7 @@ class WorkoutActivity : AppCompatActivity() {
     }
 
     fun startTimer() {
+        if(working){
         val notificationHelper = NotificationHelper(this)
 
         // Check if the timer is already running
@@ -157,6 +176,9 @@ class WorkoutActivity : AppCompatActivity() {
         // Start the countdown timer
         countdownTimer?.start()
     }
+    }
+
+
 
 
 }
