@@ -19,4 +19,7 @@
     <string name="ad_title">Select your language</string>
     <string name="button_programme_new">Add Card</string>
     <string name="programmes_default_empty">The card database is empty.</string>
+    <string name="ferma_allenamento">Stop training</string>
+    <string name="inizia_allenamento">Start training</string>
+
 </resources>

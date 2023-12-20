@@ -53,13 +53,13 @@ class WorkoutActivity : AppCompatActivity() {
             if (working) {
                 // Se la variabile è true, la imposta a false e cambia il colore del pulsante a verde
                 working = false
-                button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light))
-                button.setText("Inizia allenamento")
+                button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light, theme))
+                button.text = getString(R.string.inizia_allenamento)
             } else {
                 // Se la variabile è false, la imposta a true e cambia il colore del pulsante a rosso
                 working = true
-                button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light))
-                button.setText("Ferma allenamento")
+                button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light, theme))
+                button.text = getString(R.string.ferma_allenamento)
             }
         }
     }
