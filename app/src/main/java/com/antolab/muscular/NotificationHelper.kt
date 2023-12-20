@@ -21,37 +21,7 @@ class NotificationHelper(private val context: Context) {
         private const val CHANNEL_DESCRIPTION = "Description of my channel"
     }
 
-    fun sendCustomNotification(title: String, content: String) {
-        // Puoi personalizzare l'id della notifica come preferisci
-        val notificationId = System.currentTimeMillis().toInt()
-        showNotification(title, content, notificationId)
-    }
 
-    fun showNotification(
-        title: String,
-        content: String,
-        notificationId: Int = System.currentTimeMillis().toInt()
-    ) {
-        createNotificationChannel()
-
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(title)
-            .setContentText(content)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-        with(NotificationManagerCompat.from(context)) {
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return
-            }
-
-            notify(notificationId, builder.build())
-        }
-    }
 
     // Metodo per inviare una notifica periodica con titolo, contenuto e intervallo di tempo
     fun sendPeriodicNotification(title: String, content: String, intervalMillis: Long, instant : Boolean) {
@@ -101,5 +71,68 @@ class NotificationHelper(private val context: Context) {
         notificationManager.createNotificationChannel(channel)
     }
 
+
+
+
+    fun sendCustomNotification(title: String, content: String) {
+        val notificationId = System.currentTimeMillis().toInt()
+        showNotification(title, content, notificationId)
+    }
+
+
+
+
+    fun showNotification(
+        title: String,
+        content: String,
+        notificationId: Int = System.currentTimeMillis().toInt()
+    ) {
+        createNotificationChannel()
+
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+
+            notify(notificationId, builder.build())
+        }
+    }
+
+    fun sendUpdatableNotification(title: String, content: String, notificationId: Int) {
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+
+            // Use the same notificationId to update the existing notification
+            notify(notificationId, builder.build())
+        }
+    }
+
+    fun cancelNotification(notificationId: Int) {
+        with(NotificationManagerCompat.from(context)) {
+            cancel(notificationId)
+        }
+    }
 
 }
