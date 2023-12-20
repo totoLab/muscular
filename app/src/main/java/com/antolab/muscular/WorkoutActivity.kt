@@ -1,6 +1,7 @@
 package com.antolab.muscular
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -31,13 +32,25 @@ class WorkoutActivity : AppCompatActivity() {
     private lateinit var currentProgramme : String
     private lateinit var button: Button
 
+    private lateinit var preferences: SharedPreferences
+    private val PREF_BUTTON_STATE = "pref_button_state"
+
+
+
     var working = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workout)
 
         button = findViewById(R.id.working) // Initialize the button
+
+        preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+
+        // Ripristina lo stato del pulsante
+        working = preferences.getBoolean(PREF_BUTTON_STATE, false)
+        updateButtonState()
 
         val intent = intent
         if (intent == null) {
@@ -62,6 +75,8 @@ class WorkoutActivity : AppCompatActivity() {
                 button.text = getString(R.string.ferma_allenamento)
             }
         }
+
+
     }
 
     override fun onStart() {
@@ -95,6 +110,24 @@ class WorkoutActivity : AppCompatActivity() {
         }
         accelerometer.registerListener(accelerometerListener, accelerometer.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
     }
+    override fun onStop() {
+        super.onStop()
+
+        // Salva lo stato del pulsante quando l'activity viene interrotta
+        preferences.edit().putBoolean(PREF_BUTTON_STATE, working).apply()
+    }
+    private fun updateButtonState() {
+        if (working) {
+            // Se la variabile è true, la imposta a false e cambia il colore del pulsante a verde
+            button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light, theme))
+            button.text = getString(R.string.ferma_allenamento)
+        } else {
+            // Se la variabile è false, la imposta a true e cambia il colore del pulsante a rosso
+            button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light, theme))
+            button.text = getString(R.string.inizia_allenamento)
+        }
+    }
+
     private var countdownTimer: CountDownTimer? = null
     private suspend fun showExercise(container: LinearLayout, exercise: ExerciseEntity): Boolean {
         // Inflate the exercise template and make it visible
