@@ -101,28 +101,4 @@ class NotificationHelper(private val context: Context) {
         notificationManager.createNotificationChannel(channel)
     }
 
-/*    fun rescheduleAlarm() {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val notificationIntent = Intent(context, NotificationReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            System.currentTimeMillis().toInt(),
-            notificationIntent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-
-        // Calcola il prossimo avviso dopo l'intervallo specificato (60 secondi)
-        val nextOccurrence = calendar.timeInMillis + 60 * 1000
-
-        // Imposta l'allarme per la notifica periodica
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            nextOccurrence,
-            60 * 1000, // Ogni minuto in millisecondi
-            pendingIntent
-        )
-    }*/
 }
