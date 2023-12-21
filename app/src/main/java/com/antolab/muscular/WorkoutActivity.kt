@@ -21,10 +21,7 @@ import kotlinx.coroutines.launch
 import android.os.CountDownTimer
 import android.widget.Button
 import es.dmoral.toasty.Toasty
-
-
-
-
+import kotlin.math.abs
 
 
 class WorkoutActivity : AppCompatActivity() {
@@ -98,7 +95,7 @@ class WorkoutActivity : AppCompatActivity() {
         val accelerometerListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
                 if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-                    if (Math.abs(event.values[0]) > 10) {
+                    if (abs(event.values[0]) > 10) {
                         // Il telefono è stato preso in mano
                         startTimer()
                     }
