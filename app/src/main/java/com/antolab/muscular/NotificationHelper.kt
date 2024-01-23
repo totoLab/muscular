@@ -114,6 +114,7 @@ class NotificationHelper(private val context: Context) {
             .setContentTitle(title)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setOnlyAlertOnce(true)
 
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
