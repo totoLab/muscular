@@ -31,10 +31,9 @@ class WorkoutActivity : AppCompatActivity() {
 
     private lateinit var preferences: SharedPreferences
     private val PREF_BUTTON_STATE = "pref_button_state"
+    private var lastSensorEventTime: Long = 0
 
-
-
-    var working = false
+    private var working = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,9 +94,16 @@ class WorkoutActivity : AppCompatActivity() {
         val accelerometerListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
                 if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-                    if (abs(event.values[0]) > 10) {
-                        // Il telefono è stato preso in mano
-                        startTimer()
+                    val currentTime = System.currentTimeMillis()
+
+                    // Lascio scorrere almeno due minuti dopo che la prima notifica è stata inviata per evitare che vengano inviate più notifiche quando il telefono è stato preso in mano la stessa volta
+                    if (currentTime - lastSensorEventTime >  2 * 60 * 1000) {
+                        lastSensorEventTime = currentTime
+
+                        if (abs(event.values[0]) > 10) {
+                            // The phone has been picked up, start the timer
+                            startTimer()
+                        }
                     }
                 }
             }
@@ -164,6 +170,7 @@ class WorkoutActivity : AppCompatActivity() {
     }
 
     fun startTimer() {
+
         if(working){
         val notificationHelper = NotificationHelper(this)
 
