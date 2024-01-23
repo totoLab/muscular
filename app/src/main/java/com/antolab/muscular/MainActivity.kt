@@ -48,8 +48,8 @@ class MainActivity : AppCompatActivity() {
         notificationHelper.sendPeriodicNotification(
             "Fresh Time!",
             "Mantieniti idratato durante la tua giornata!",
-            60 * 60 * 1000,
-            false) // Ogni ora in millisecondi
+            60 * 1000,
+            true) // Ogni ora in millisecondi
     }
 
 
