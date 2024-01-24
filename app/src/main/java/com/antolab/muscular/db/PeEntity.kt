@@ -7,7 +7,7 @@ import androidx.room.*
     foreignKeys = [
         ForeignKey(
             entity = ProgrammeEntity::class,
-            parentColumns = ["name"],
+            parentColumns = ["name_it"],
             childColumns = ["programmeId"],
             onDelete = ForeignKey.CASCADE
         ),

@@ -10,30 +10,32 @@ import kotlinx.coroutines.*
 import com.antolab.muscular.db.*
 import com.antolab.muscular.utils.*
 class ExercisesActivity : AppCompatActivity() {
-    private lateinit var appDao : AppDao
+    private lateinit var appDao: AppDao
+    private lateinit var selectedLanguage: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercises)
 
         val database = MyApplication.appDatabase
-
         appDao = database.appDao()
 
-        val buttonAdd : Button = findViewById(R.id.button_exercise_new)
+        // Load selected language from SharedPreferences
+        selectedLanguage = loadLocate()
+
+        val buttonAdd: Button = findViewById(R.id.button_exercise_new)
         buttonAdd.setOnClickListener {
             GlobalScope.launch {
                 if (appDao.getExercisesCount() == 0) {
-                    val instance = PrePopulation(this@ExercisesActivity)
+                    val instance = PrePopulation(this@ExercisesActivity, appDao)
                     instance.exercisesPrepopulation()
                     instance.setPrepopulation()
                 } else {
-                    Toast.makeText(this@ExercisesActivity, "DB is not empty", Toast.LENGTH_LONG).show()
+                    // Handle if DB is not empty
                 }
             }
         }
     }
-
     override fun onStart() {
         super.onStart()
 
@@ -42,7 +44,7 @@ class ExercisesActivity : AppCompatActivity() {
         MainScope().launch {
             if (appDao.getExercisesCount() == 0) {
                 val empty = findViewById<TextView>(R.id.exercices_default_empty)
-                empty.visibility = View.VISIBLE;
+                empty.visibility = View.VISIBLE
                 return@launch
             } else {
                 // add exercises dynamically
@@ -56,22 +58,39 @@ class ExercisesActivity : AppCompatActivity() {
 
     private fun showExercise(container: LinearLayout, exercise: ExerciseEntity): Boolean {
         // Inflate the exercise template and make it visible
-        val exerciseElement : RelativeLayout = layoutInflater.inflate(R.layout.exercise_template, null) as RelativeLayout
+        val exerciseElement: RelativeLayout = layoutInflater.inflate(R.layout.exercise_template, null) as RelativeLayout
         exerciseElement.visibility = View.VISIBLE
 
         // Setup information about the exercise
         // name
         val textViewExerciseName = exerciseElement.findViewById<TextView>(R.id.exerciseName)
-        textViewExerciseName.text = exercise.name
+        val exerciseName = when (selectedLanguage) {
+            "en" -> exercise.name_en
+            "es" -> exercise.name_es
+            "de" -> exercise.name_de
+            "fr" -> exercise.name_fr
+            "it" -> exercise.name_it
+            else -> exercise.name  // Fallback to default name
+        }
+
+        textViewExerciseName.text = exerciseName
 
         // description
         val textViewExerciseDescription = exerciseElement.findViewById<TextView>(R.id.exerciseDescription)
-        textViewExerciseDescription.text = exercise.description
+        val exerciseDescription = when (selectedLanguage) {
+            "en" -> exercise.description_en
+            "es" -> exercise.description_es
+            "de" -> exercise.description_de
+            "fr" -> exercise.description_fr
+            "it" -> exercise.description_it
+            else -> exercise.description  // Fallback to default description
+        }
+        textViewExerciseDescription.text = exerciseDescription
 
         // image
         val setImageOutcome = setImage(exerciseElement, exercise.image)
 
-        // deleting specific exercise from database
+        // deleting specific exercise from the database
         val deleteButton = exerciseElement.findViewById<Button>(R.id.exercise_delete_button)
         deleteButton.setOnClickListener {
             container.removeView(exerciseElement)
@@ -84,6 +103,9 @@ class ExercisesActivity : AppCompatActivity() {
         container.addView(exerciseElement)
         return setImageOutcome
     }
+
+
+
 
     private fun setImage(inflatedElement: RelativeLayout, imageName: String): Boolean {
         var outcome: Boolean
@@ -98,7 +120,7 @@ class ExercisesActivity : AppCompatActivity() {
         } else {
             imageThumbButton.setImageResource(id)
             imageThumbButton.setOnClickListener{
-                showFullscreenImage(null, id)
+                showFullscreenImage(id)
             }
             msg = "Image $id loaded from $imageName"
             outcome = true
@@ -108,7 +130,7 @@ class ExercisesActivity : AppCompatActivity() {
     }
 
 
-    fun showFullscreenImage(view: View?, imageId: Int) {
+    fun showFullscreenImage(imageId: Int) {
         // Create a dialog with a custom layout
         val fullscreenDialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         fullscreenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -122,5 +144,8 @@ class ExercisesActivity : AppCompatActivity() {
     private fun imageId(imagePath: String) : Int {
         return resources.getIdentifier(imagePath, "drawable", packageName)
     }
-
+    private fun loadLocate(): String {
+        val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
+        return sharedPreferences.getString("My_Lang", "en") ?: "en"
+    }
 }

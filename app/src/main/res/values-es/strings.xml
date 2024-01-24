@@ -19,4 +19,12 @@
     <string name="ad_title">elige tu idioma</string>
     <string name="button_programme_new">Agregar tarjeta</string>
     <string name="programmes_default_empty">La base de datos de la tarjeta está vacía.</string>
+    <string name="set_id">IDENTIFICACIÓN</string>
+    <string name="set_reps">Representantes</string>
+    <string name="set_weight">Peso</string>
+    <string name="curr_weight">Peso</string>
+    <string name="curr_reps">repeticiones</string>
+    <string name="inizia_allenamento">Empezar a entrenar</string>
+
+
 </resources>
