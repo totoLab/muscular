@@ -19,12 +19,13 @@
     <string name="ad_title">choisissez votre langue</string>
     <string name="button_programme_new">Ajouter une carte</string>
     <string name="programmes_default_empty">La base de données des cartes est vide.</string>
+
     <string name="set_id">IDENTIFIANT</string>
     <string name="set_reps">Représentants</string>
     <string name="set_weight">Poids</string>
     <string name="curr_weight">Poids</string>
     <string name="curr_reps">Répétitions</string>
     <string name="inizia_allenamento">Commence l\'entraînement</string>
-
+    <string name="ferma_allenamento">Arrêter l\'entraînement</string>
 
 </resources>
