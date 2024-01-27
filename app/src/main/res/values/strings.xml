@@ -19,4 +19,7 @@
     <string name="ad_title">Seleziona la lingua</string>
     <string name="button_programme_new">Aggiungi Scheda</string>
     <string name="programmes_default_empty">Il database di schede è vuoto.</string>
+    <string name="ferma_allenamento">Ferma allenamento</string>
+    <string name="inizia_allenamento">Inizia allenamento</string>
+
 </resources>

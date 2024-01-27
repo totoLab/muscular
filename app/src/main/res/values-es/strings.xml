@@ -19,4 +19,7 @@
     <string name="ad_title">elige tu idioma</string>
     <string name="button_programme_new">Agregar tarjeta</string>
     <string name="programmes_default_empty">La base de datos de la tarjeta está vacía.</string>
+    <string name="ferma_allenamento">dejar de entrenar</string>
+    <string name="inizia_allenamento">Empezar a entrenar</string>
+
 </resources>

@@ -3,10 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-    <meta-data
-        android:name="com.google.firebase.messaging.default_notification_channel_id"
-        android:value="@string/default_notification_channel_id" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer" />
 
     <application
         android:name=".MyApplication"
@@ -47,16 +44,10 @@
             android:name=".NotificationReceiver"
             android:enabled="true"
             android:exported="false">
-
-
         </receiver>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
-         </application>
-
-
-
-
+    </application>
 </manifest>
