@@ -19,7 +19,14 @@
     <string name="ad_title">Wähle deine Sprache</string>
     <string name="button_programme_new">Karte hinzufügen</string>
     <string name="programmes_default_empty">Die Kartendatenbank ist leer.</string>
-    <string name="ferma_allenamento">Hören Sie auf zu trainieren</string>
+
+    <string name="set_id">AUSWEIS</string>
+    <string name="set_reps">Vertreter</string>
+    <string name="set_weight">Gewicht</string>
+    <string name="curr_weight">Gewicht</string>
+    <string name="curr_reps">Wiederholungen</string>
     <string name="inizia_allenamento">Beginne zu trainieren</string>
+    <string name="ferma_allenamento">Hören Sie auf zu trainieren</string>
+
 
 </resources>

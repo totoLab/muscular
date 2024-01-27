@@ -1,5 +1,6 @@
 package com.antolab.muscular
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,14 +20,13 @@ class WorkoutsActivity : AppCompatActivity() {
 
 
         val database = MyApplication.appDatabase
-
         appDao = database.appDao()
 
         val button_add : Button = findViewById(R.id.button_programme_new)
         button_add.setOnClickListener {
             GlobalScope.launch {
                 if (appDao.getProgrammesCount() == 0) {
-                    val instance = PrePopulation(this@WorkoutsActivity)
+                    val instance = PrePopulation(this@WorkoutsActivity, appDao)
                     instance.programmesPrepopulation()
                     instance.pePrepopulation()
                 } else {
@@ -44,7 +44,7 @@ class WorkoutsActivity : AppCompatActivity() {
         MainScope().launch {
             if (appDao.getProgrammesCount() == 0) {
                 val empty = findViewById<TextView>(R.id.programmes_default_empty)
-                empty.visibility = View.VISIBLE;
+                empty.visibility = View.VISIBLE
                 return@launch
             } else {
                 // add exercises dynamically
@@ -62,6 +62,8 @@ class WorkoutsActivity : AppCompatActivity() {
         container.removeAllViews()
     }
 
+
+
     private fun showProgramme(container: LinearLayout, programme: ProgrammeEntity): Boolean {
         // Inflate the exercise template and make it visible
         val programmeElement : ConstraintLayout = layoutInflater.inflate(R.layout.programme_template, null) as ConstraintLayout
@@ -70,7 +72,17 @@ class WorkoutsActivity : AppCompatActivity() {
         // Setup information about the exercise
         // name
         val textViewProgrammeName = programmeElement.findViewById<TextView>(R.id.programme_name)
-        textViewProgrammeName.text = programme.name
+
+        // Handle translation for program name
+        val programName = when (loadLocate()) {
+            "en" -> programme.name_en
+            "es" -> getTranslatedProgrammeName(programme, "es")
+            "fr" -> getTranslatedProgrammeName(programme, "fr")
+            "it" -> getTranslatedProgrammeName(programme, "it")
+            "de" -> getTranslatedProgrammeName(programme, "de")
+            else -> programme.name_en // Fallback to default name
+        }
+        textViewProgrammeName.text = programName
 
         // deleting specific exercise from database
         val deleteButton = programmeElement.findViewById<Button>(R.id.programme_delete_button)
@@ -78,17 +90,33 @@ class WorkoutsActivity : AppCompatActivity() {
             container.removeView(programmeElement)
             MainScope().launch {
                 appDao.deleteProgramme(programme)
-                Log.d("exerciseDeletion", "Deleted $programme from the list.}")
+                Log.d("exerciseDeletion", "Deleted $programme from the list.")
             }
         }
 
         textViewProgrammeName.setOnClickListener {
-            val intent : Intent = Intent(this, WorkoutActivity::class.java)
-            intent.putExtra("programmeName", programme.name);
+            val intent = Intent(this, WorkoutActivity::class.java)
+            intent.putExtra("programmeName", programme.name_it)
             startActivity(intent)
         }
 
         container.addView(programmeElement)
         return true
     }
+
+    private fun getTranslatedProgrammeName(programme: ProgrammeEntity, language: String): String {
+        return when (language) {
+            "es" -> programme.name_es
+            "fr" -> programme.name_fr
+            "it" -> programme.name_it
+            "de" -> programme.name_de
+            else -> programme.name_it // Fallback to default name (English)
+        }
+    }
+
+    private fun loadLocate(): String {
+        val sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("My_Lang", "") ?: ""
+    }
+
 }

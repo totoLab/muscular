@@ -1,6 +1,42 @@
 {
-  "1": {"name": "Gambe"},
-  "2": {"name": "Dorso e Tricipiti"},
-  "3": {"name": "Petto e Spalle"},
-  "4": {"name": "Cardio e Addominali"}
+  "1": {
+    "id": 1,
+    "name" : "Gambe",
+    "name_en": "Legs",
+    "name_es": "Piernas",
+    "name_de": "Beine",
+    "name_fr": "Jambes",
+    "name_it": "Gambe",
+    "image": "legs_image"
+  },
+  "2": {
+    "id": 2,
+    "name": "Dorso e Tricipiti",
+    "name_en": "Back and Triceps",
+    "name_es": "Espalda y Tríceps",
+    "name_de": "Rücken und Trizeps",
+    "name_fr": "Dos et Triceps",
+    "name_it": "Dorso e Tricipiti",
+    "image": "back_triceps_image"
+  },
+  "3": {
+    "id": 3,
+    "name": "Petto e Spalle",
+    "name_en": "Chest and Shoulders",
+    "name_es": "Pecho y Hombros",
+    "name_de": "Brust und Schultern",
+    "name_fr": "Poitrine et Épaules",
+    "name_it": "Petto e Spalle",
+    "image": "chest_shoulders_image"
+  },
+  "4": {
+    "id": 4,
+    "name": "Cardio e Addominali",
+    "name_en": "Cardio and Abs",
+    "name_es": "Cardio y Abdominales",
+    "name_de": "Cardio und Bauchmuskeln",
+    "name_fr": "Cardio et Abdos",
+    "name_it": "Cardio e Addominali",
+    "image": "cardio_abs_image"
+  }
 }

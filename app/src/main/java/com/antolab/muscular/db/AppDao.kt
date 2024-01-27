@@ -5,7 +5,7 @@ import androidx.room.*
 @Dao
 interface AppDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPE(peEntity: PeEntity)
 
     @Query("""
@@ -30,7 +30,7 @@ interface AppDao {
     """)
     suspend fun getExerciseOfProgrammeCount(programmeName: String): Int
 
-    @Query("SELECT * FROM programme WHERE name = :programmeId")
+    @Query("SELECT * FROM programme WHERE name_en = :programmeId")
     suspend fun getProgramme(programmeId: String): ProgrammeEntity?
     @Query("SELECT * FROM exercises WHERE id = :exerciseId")
     suspend fun getExercise(exerciseId: Long): ExerciseEntity?
@@ -80,4 +80,10 @@ interface AppDao {
 
     @Delete
     suspend fun deleteExercise(exercise: ExerciseEntity)
+
+    @Query("SELECT * FROM exercises WHERE name = :exerciseName AND language = :selectedLanguage")
+    suspend fun getExerciseByName(exerciseName: String, selectedLanguage: String): ExerciseEntity?
+
+    @Query("UPDATE exercises SET language = :newLanguage")
+    suspend fun updateLanguagePreference(newLanguage: String)
 }
