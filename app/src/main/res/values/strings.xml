@@ -29,6 +29,8 @@
     <string name="Timer">Il timer sta per scadere.</string>
     <string name="Rimasto">secondi rimasti.</string>
     <string name="Riposo">Riposo (sec):</string>
+    <string name="FreshTime" translatable="false">"Fresh Time!"</string>
+    <string name="StayHydrated">Mantieniti idratato durante la tua giornata!</string>
 
 
 
