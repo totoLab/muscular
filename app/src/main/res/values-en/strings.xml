@@ -28,9 +28,10 @@
     <string name="Riprendi">Get back to training!</string>
     <string name="Timer">The timer is about to expire.</string>
     <string name="Rimasto">seconds left.</string>
-    
-    
-    
+    <string name="Riposo">Rest (sec):</string>
+
+
+
 
     <string name="ferma_allenamento">Stop training</string>
 

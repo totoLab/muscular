@@ -7,161 +7,198 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
+import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.NumberPicker
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.antolab.muscular.db.*
+import androidx.core.content.edit
+import com.antolab.muscular.db.AppDao
+import com.antolab.muscular.db.ExerciseEntity
+import com.antolab.muscular.db.SetEntity
+import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import android.os.CountDownTimer
-import android.widget.Button
-import es.dmoral.toasty.Toasty
 import kotlin.math.abs
-
 
 class WorkoutActivity : AppCompatActivity() {
 
-    private lateinit var appDao : AppDao
-    private lateinit var currentProgramme : String
+    private lateinit var appDao: AppDao
+    private lateinit var currentProgramme: String
     private lateinit var button: Button
     private lateinit var selectedLanguage: String
 
     private lateinit var preferences: SharedPreferences
     private val PREF_BUTTON_STATE = "pref_button_state"
+    private val PREF_CHOSEN_TIMER = "pref_chosen_timer"
     private var lastSensorEventTime: Long = 0
 
     private var working = false
     private var firstNotificationSent = false
+    private var chosenTimer = 0
 
-
+    private var countdownTimer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_workout)
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_workout)
 
+    initializeViews()
 
+    // Check if the timer value is already stored in preferences
+    if (!preferences.contains(PREF_CHOSEN_TIMER)) {
+        // If not, set it to the default value of 60
+        preferences.edit {
+            putInt(PREF_CHOSEN_TIMER, 60)
+        }
+    }
 
-        // Load selected language from SharedPreferences
-        selectedLanguage = loadLocate()
+    initializeTimer()
 
-        button = findViewById(R.id.working) // Initialize the button
+    if (savedInstanceState != null) {
+        restoreInstanceState(savedInstanceState)
+    } else {
+        restorePreferences()
+    }
 
+    val intent = intent
+    if (intent == null) {
+        finish()
+        Toast.makeText(this, "ERROR: no programme was passed", Toast.LENGTH_LONG).show()
+    } else {
+        currentProgramme = intent.getStringExtra("programmeName").toString()
+        Log.d("WorkoutActivity", "Current Programme: $currentProgramme")
+        val database = MyApplication.appDatabase
+        appDao = database.appDao()
+    }
+
+    setButtonClickListeners()
+}
+    private fun initializeViews() {
+        button = findViewById(R.id.working)
         preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        selectedLanguage = loadLocate()
+    }
 
-        // Ripristina lo stato del pulsante
+    private fun initializeTimer() {
+        val numberPicker: NumberPicker = findViewById(R.id.numberPicker)
+        numberPicker.minValue = 60
+        numberPicker.maxValue = 300
+
+        chosenTimer = preferences.getInt(PREF_CHOSEN_TIMER, 60)
+        numberPicker.value = chosenTimer
+
+        numberPicker.setOnValueChangedListener { _, _, newVal ->
+            chosenTimer = newVal
+        }
+    }
+
+    private fun restorePreferences() {
         working = preferences.getBoolean(PREF_BUTTON_STATE, false)
         updateButtonState()
+    }
 
+    private fun restoreInstanceState(savedInstanceState: Bundle) {
+        initializeTimer()
+        working = savedInstanceState.getBoolean(PREF_BUTTON_STATE, false)
+        chosenTimer = savedInstanceState.getInt(PREF_CHOSEN_TIMER, 60)
+        updateButtonState()
+    }
 
-        val intent = intent
-        if (intent == null) {
-            finish()
-            Toast.makeText(this, "ERROR: no programme was passed", Toast.LENGTH_LONG).show()
-        } else {
-            currentProgramme = intent.getStringExtra("programmeName").toString()
-            Log.d("WorkoutActivity", "Current Programme: $currentProgramme")
-            val database = MyApplication.appDatabase
-            appDao = database.appDao()
-        }
-
-
+    private fun setButtonClickListeners() {
         button.setOnClickListener {
-            if (working) {
-                // Se la variabile è true, la imposta a false e cambia il colore del pulsante a verde
-                working = false
-                button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light, theme))
-                button.text = getString(R.string.inizia_allenamento)
-            } else {
-                // Se la variabile è false, la imposta a true e cambia il colore del pulsante a rosso
-                working = true
-                button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light, theme))
-                button.text = getString(R.string.ferma_allenamento)
-            }
+            toggleButtonState()
         }
+    }
 
+    private fun toggleButtonState() {
+        if (working) {
+            working = false
+            button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light, theme))
+            button.text = getString(R.string.inizia_allenamento)
+        } else {
+            working = true
+            button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light, theme))
+            button.text = getString(R.string.ferma_allenamento)
+        }
+    }
 
+    private fun updateButtonState(backgroundColorResId: Int = android.R.color.holo_green_light, buttonTextResId: Int = R.string.inizia_allenamento) {
+        button.setBackgroundColor(resources.getColor(backgroundColorResId, theme))
+        button.text = getString(buttonTextResId)
+    }
 
+    private fun loadLocate(): String {
+        val sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("My_Lang", "it") ?: "it"
     }
 
     override fun onStart() {
         super.onStart()
+        setupExerciseViews()
+        setupAccelerometerListener()
+    }
 
+    private fun setupExerciseViews() {
         val container = findViewById<LinearLayout>(R.id.workout_exercises_container) ?: return
 
         MainScope().launch {
-            Log.d("WorkoutActivity", "MainScope launch block entered")
             val exerciseCount = appDao.getExerciseOfProgrammeCount(currentProgramme)
-            Log.d("WorkoutActivity", "Exercise Count: $exerciseCount")
-            if (appDao.getExerciseOfProgrammeCount(currentProgramme) >= 1) {
-                // add exercises dynamically
+            if (exerciseCount >= 1) {
                 for (exercise in appDao.getAllExerciseOfProgramme(currentProgramme)) {
-                    Log.d("WorkoutActivity", "Adding exercise: $exercise")
-                    val adding_outcome: Boolean = showExercise(container, exercise)
-                    Log.d("exerciseProgrammeLoading", "$exercise was ${if (adding_outcome) "" else "not"} added to the scroll view")
+                    val addingOutcome: Boolean = showExercise(container, exercise)
+                    Log.d("exerciseProgrammeLoading", "$exercise was ${if (addingOutcome) "" else "not"} added to the scroll view")
                 }
             }
         }
+    }
 
+    private fun setupAccelerometerListener() {
         val accelerometer = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         val accelerometerListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
                 if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-                    val currentTime = System.currentTimeMillis()
-
-                     //Lascio scorrere almeno due minuti dopo che la prima notifica è stata inviata per evitare che vengano inviate più notifiche quando il telefono è stato preso in mano la stessa volta
-                    if (!firstNotificationSent && currentTime - lastSensorEventTime > 2 * 60 * 1000 && abs(event.values[0]) > 10) {
-                        lastSensorEventTime = currentTime
-
-                        // The phone has been picked up, start the timer
-                        startTimer()
-
-                        // Set the flag to true to indicate that the first notification has been sent
-                        firstNotificationSent = true
-                    }
+                    handleAccelerometerEvent(event)
                 }
             }
 
             override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
+                // Not needed for this example
             }
         }
-        accelerometer.registerListener(accelerometerListener, accelerometer.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
-    }
-    override fun onStop() {
-        super.onStop()
 
-        // Salva lo stato del pulsante quando l'activity viene interrotta
-        preferences.edit().putBoolean(PREF_BUTTON_STATE, working).apply()
+        accelerometer.registerListener(
+            accelerometerListener,
+            accelerometer.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
     }
-    private fun updateButtonState() {
-        if (working) {
-            // Se la variabile è true, la imposta a false e cambia il colore del pulsante a verde
-            button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light, theme))
-            button.text = getString(R.string.ferma_allenamento)
-        } else {
-            // Se la variabile è false, la imposta a true e cambia il colore del pulsante a rosso
-            button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light, theme))
-            button.text = getString(R.string.inizia_allenamento)
+
+    private fun handleAccelerometerEvent(event: SensorEvent) {
+        val currentTime = System.currentTimeMillis()
+
+        if (!firstNotificationSent && currentTime - lastSensorEventTime > 2 * 60 * 1000 && abs(event.values[0]) > 10) {
+            lastSensorEventTime = currentTime
+            startTimer()
+            firstNotificationSent = true
         }
     }
 
-    private var countdownTimer: CountDownTimer? = null
     private suspend fun showExercise(container: LinearLayout, exercise: ExerciseEntity): Boolean {
-        // Inflate the exercise template and make it visible
-        val exerciseWrapper : ConstraintLayout= layoutInflater.inflate(R.layout.exercise_instance_wrapper, null) as ConstraintLayout
+        val exerciseWrapper: ConstraintLayout =
+            layoutInflater.inflate(R.layout.exercise_instance_wrapper, null) as ConstraintLayout
 
-        // title
-        val title : TextView = exerciseWrapper.findViewById(R.id.exercise_name)
+        val title: TextView = exerciseWrapper.findViewById(R.id.exercise_name)
         title.text = getLocalizedExerciseName(exercise)
 
-        // sets
-        val exerciseElement : TableLayout = exerciseWrapper.findViewById(R.id.exercise_instance)
-        val sets : List<SetEntity> = appDao.getAllSetsOfExercise(exercise.id)
-
+        val exerciseElement: TableLayout = exerciseWrapper.findViewById(R.id.exercise_instance)
+        val sets: List<SetEntity> = appDao.getAllSetsOfExercise(exercise.id)
 
         val labelReps = resources.getString(R.string.curr_reps)
         val labelWeight = resources.getString(R.string.curr_weight)
@@ -177,7 +214,7 @@ class WorkoutActivity : AppCompatActivity() {
     }
 
     private fun showSet(exerciseElement: TableLayout, id: String, reps: String, weight: String) {
-        val setElement : TableRow = layoutInflater.inflate(R.layout.set_template, null) as TableRow
+        val setElement: TableRow = layoutInflater.inflate(R.layout.set_template, null) as TableRow
 
         val idView = setElement.findViewById<TextView>(R.id.id_number)
         idView.text = id
@@ -191,7 +228,6 @@ class WorkoutActivity : AppCompatActivity() {
         exerciseElement.addView(setElement)
     }
 
-
     private fun getLocalizedExerciseName(exercise: ExerciseEntity): String {
         return when (selectedLanguage) {
             "en" -> exercise.name_en
@@ -199,70 +235,66 @@ class WorkoutActivity : AppCompatActivity() {
             "de" -> exercise.name_de
             "fr" -> exercise.name_fr
             "it" -> exercise.name_it
-            else -> exercise.name_it  // Fallback to default name
+            else -> exercise.name_it
         }
     }
 
-    private fun loadLocate(): String {
-        val sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("My_Lang", "it") ?: "it"
-    }
+    private fun startTimer() {
+        if (working) {
+            val notificationHelper = NotificationHelper(this)
 
-
-
-    fun startTimer() {
-
-        if(working){
-        val notificationHelper = NotificationHelper(this)
-
-        // Check if the timer is already running
-        if (countdownTimer != null) {
-            // Timer is already running, do nothing or handle as needed
-            return
-        }
-
-        // Create a notification with an initial message
-        val notificationId = System.currentTimeMillis().toInt()
-
-        // Create a countdown timer with 60 seconds duration and 1-second intervals
-        countdownTimer = object : CountDownTimer(60000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                // This method will be called every second during the countdown
-                val secondsRemaining = millisUntilFinished / 1000
-
-                // Update the existing notification with the new message
-                notificationHelper.sendUpdatableNotification(
-                    getString(R.string.Riprendi),
-                    getString(R.string.Timer) + " $secondsRemaining " + getString(R.string.Rimasto),
-                    notificationId
-                )
-
-
-
+            // Check if the timer is already running
+            if (countdownTimer != null) {
+                return
             }
 
-            override fun onFinish() {
-                // This method will be called when the countdown is finished
-                // Handle any actions you want to perform when the timer finishes
+            // Create a notification with an initial message
+            val notificationId = System.currentTimeMillis().toInt()
 
-                // Reset the timer
-                countdownTimer = null
-                notificationHelper.cancelNotification(notificationId)
+            countdownTimer = object : CountDownTimer(chosenTimer.toLong() * 1000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val secondsRemaining = millisUntilFinished / 1000
 
-                firstNotificationSent = false
+                    // Update the existing notification with the new message
+                    notificationHelper.sendUpdatableNotification(
+                        getString(R.string.Riprendi),
+                        getString(R.string.Timer) + " $secondsRemaining " + getString(R.string.Rimasto),
+                        notificationId
+                    )
+                }
 
-                // Show a success toast when the timer finishes
-                Toasty.success(this@WorkoutActivity, getString(R.string.Riprendi), Toast.LENGTH_SHORT, true).show()
+                override fun onFinish() {
+                    countdownTimer = null
+                    notificationHelper.cancelNotification(notificationId)
+                    firstNotificationSent = false
+
+                    Toasty.success(
+                        this@WorkoutActivity,
+                        getString(R.string.Riprendi),
+                        Toast.LENGTH_SHORT,
+                        true
+                    ).show()
+                }
             }
+
+            countdownTimer?.start()
         }
-
-        // Start the countdown timer
-        countdownTimer?.start()
-    }
     }
 
+    override fun onStop() {
+        super.onStop()
+        // Save the button state and timer value when the activity is interrupted
+        preferences.edit {
+            putBoolean(PREF_BUTTON_STATE, working)
+            putInt(PREF_CHOSEN_TIMER, chosenTimer)
+        }
+    }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(PREF_BUTTON_STATE, working)
+        outState.putInt(PREF_CHOSEN_TIMER, chosenTimer)
+    }
 
 
 }
-

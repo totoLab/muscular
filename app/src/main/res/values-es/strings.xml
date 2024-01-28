@@ -28,9 +28,10 @@
     <string name="Riprendi">¡Vuelve a entrenar!</string>
     <string name="Timer">El cronómetro está a punto de expirar.</string>
     <string name="Rimasto">Quedan segundos.</string>
-    
-    
-    
+    <string name="Riposo">Descanso (seg):</string>
+
+
+
 
     <string name="ferma_allenamento">dejar de entrenar</string>
 
