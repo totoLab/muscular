@@ -19,6 +19,7 @@ class WorkoutsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_workouts)
 
 
+
         val database = MyApplication.appDatabase
         appDao = database.appDao()
 

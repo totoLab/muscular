@@ -28,9 +28,10 @@
     <string name="Riprendi">Reprenez l\'entraînement !</string>
     <string name="Timer">Le minuteur est sur le point d\'expirer.</string>
     <string name="Rimasto">il reste quelques secondes.</string>
-    
-    
-    
+    <string name="Riposo"><![CDATA[Repos (s) :]]></string>
+
+
+
 
     <string name="ferma_allenamento">Arrêter l\'entraînement</string>
 

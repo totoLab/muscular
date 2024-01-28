@@ -28,9 +28,10 @@
     <string name="Riprendi">Zurück zum Training!</string>
     <string name="Timer">Der Timer läuft bald ab.</string>
     <string name="Rimasto">Sekunden übrig.</string>
-    
-    
-    
+    <string name="Riposo">Ruhe (Sek.):</string>
+
+
+
 
     <string name="ferma_allenamento">Hören Sie auf zu trainieren</string>
 
