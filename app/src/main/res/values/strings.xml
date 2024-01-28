@@ -25,6 +25,12 @@
     <string name="curr_weight">Peso</string>
     <string name="curr_reps">Ripetizioni</string>
     <string name="inizia_allenamento">Inizia allenamento</string>
+    <string name="Riprendi">Riprendi ad allenarti!</string>
+    <string name="Timer">Il timer sta per scadere.</string>
+    <string name="Rimasto">secondi rimasti.</string>
+
+
+
 
     <string name="ferma_allenamento">Ferma allenamento</string>
 

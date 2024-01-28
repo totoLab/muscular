@@ -232,10 +232,13 @@ class WorkoutActivity : AppCompatActivity() {
 
                 // Update the existing notification with the new message
                 notificationHelper.sendUpdatableNotification(
-                    "Riprendi ad allenarti!",
-                    "Il timer sta per scadere. $secondsRemaining secondi rimasti.",
+                    getString(R.string.Riprendi),
+                    getString(R.string.Timer) + " $secondsRemaining " + getString(R.string.Rimasto),
                     notificationId
                 )
+
+
+
             }
 
             override fun onFinish() {
