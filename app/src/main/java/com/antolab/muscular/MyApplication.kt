@@ -22,7 +22,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 
         if (columnIndex == -1) {
             // 'language' column does not exist, add it
-            db.execSQL("ALTER TABLE exercises ADD COLUMN language TEXT NOT NULL DEFAULT 'en'")
+            db.execSQL("ALTER TABLE exercises ADD COLUMN language TEXT NOT NULL DEFAULT 'it'")
             // Add the new translation columns
             db.execSQL("ALTER TABLE exercises ADD COLUMN name_en TEXT DEFAULT 'undefined'")
             db.execSQL("ALTER TABLE exercises ADD COLUMN name_es TEXT DEFAULT 'undefined'")
@@ -49,8 +49,7 @@ val MIGRATION_2_3: Migration = object : Migration(2, 3) {
                 "`name_es` TEXT NOT NULL, " +
                 "`name_fr` TEXT NOT NULL, " +
                 "`name_de` TEXT NOT NULL, " +
-                "`name_it` TEXT NOT NULL, " +
-                "PRIMARY KEY(`id`))")
+                "`name_it` TEXT NOT NULL)")
 
         // Copy data from the old table to the new table
         db.execSQL("INSERT INTO `programme_new` " +
@@ -102,4 +101,5 @@ class MyApplication : Application() {
             Log.e("RoomDatabase", "Error creating database", e)
         }
     }
+
 }

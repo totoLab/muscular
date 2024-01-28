@@ -112,7 +112,7 @@ class WorkoutActivity : AppCompatActivity() {
                 if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
                     val currentTime = System.currentTimeMillis()
 
-                    // Lascio scorrere almeno due minuti dopo che la prima notifica è stata inviata per evitare che vengano inviate più notifiche quando il telefono è stato preso in mano la stessa volta
+                     //Lascio scorrere almeno due minuti dopo che la prima notifica è stata inviata per evitare che vengano inviate più notifiche quando il telefono è stato preso in mano la stessa volta
                     if (currentTime - lastSensorEventTime >  2 * 60 * 1000) {
                         lastSensorEventTime = currentTime
 
@@ -197,13 +197,13 @@ class WorkoutActivity : AppCompatActivity() {
             "de" -> exercise.name_de
             "fr" -> exercise.name_fr
             "it" -> exercise.name_it
-            else -> exercise.name_en  // Fallback to default name
+            else -> exercise.name_it  // Fallback to default name
         }
     }
 
     private fun loadLocate(): String {
         val sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("My_Lang", "en") ?: "en"
+        return sharedPreferences.getString("My_Lang", "it") ?: "it"
     }
 
 

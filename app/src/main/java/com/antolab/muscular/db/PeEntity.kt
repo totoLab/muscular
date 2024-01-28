@@ -17,7 +17,10 @@ import androidx.room.*
             childColumns = ["exerciseId"],
             onDelete = ForeignKey.CASCADE
         )
+
     ],
+
+    indices = [Index(value = ["exerciseId"])],
     primaryKeys = [ "programmeId", "exerciseId" ]
 )
 data class PeEntity(
