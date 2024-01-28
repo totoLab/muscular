@@ -29,6 +29,8 @@
     <string name="Timer">El cronómetro está a punto de expirar.</string>
     <string name="Rimasto">Quedan segundos.</string>
     <string name="Riposo">Descanso (seg):</string>
+    <string name="FreshTime" translatable="false">"Fresh Time!"</string>
+    <string name="StayHydrated">¡Manténgase hidratado durante todo el día!</string>
 
 
 

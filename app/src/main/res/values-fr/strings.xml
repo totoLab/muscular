@@ -29,6 +29,8 @@
     <string name="Timer">Le minuteur est sur le point d\'expirer.</string>
     <string name="Rimasto">il reste quelques secondes.</string>
     <string name="Riposo"><![CDATA[Repos (s) :]]></string>
+    <string name="FreshTime" translatable="false">"Fresh Time!"</string>
+    <string name="StayHydrated">Restez hydraté tout au long de votre journée !</string>
 
 
 

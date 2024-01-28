@@ -58,8 +58,8 @@ class MainActivity : AppCompatActivity() {
 
         //esempio di notifica periodica, con true invia anche una notifica all'avvio, altrimenti no
         notificationHelper.sendPeriodicNotification(
-            "Fresh Time!",
-            "Mantieniti idratato durante la tua giornata!",
+            getString(R.string.FreshTime),
+            getString(R.string.StayHydrated),
             60 * 60 * 1000,
             true) // Ogni ora in millisecondi
     }
