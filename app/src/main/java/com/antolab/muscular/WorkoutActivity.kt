@@ -94,6 +94,7 @@ class WorkoutActivity : AppCompatActivity() {
         val accelerometerListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
                 if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                    lastSensorEventTime = 0
                     val currentTime = System.currentTimeMillis()
 
                     // Lascio scorrere almeno due minuti dopo che la prima notifica è stata inviata per evitare che vengano inviate più notifiche quando il telefono è stato preso in mano la stessa volta
