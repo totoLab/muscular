@@ -80,7 +80,7 @@ class WorkoutsActivity : AppCompatActivity() {
             "fr" -> getTranslatedProgrammeName(programme, "fr")
             "it" -> getTranslatedProgrammeName(programme, "it")
             "de" -> getTranslatedProgrammeName(programme, "de")
-            else -> programme.name_en // Fallback to default name
+            else -> programme.name_it // Fallback to default name
         }
         textViewProgrammeName.text = programName
 
@@ -116,7 +116,7 @@ class WorkoutsActivity : AppCompatActivity() {
 
     private fun loadLocate(): String {
         val sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("My_Lang", "") ?: ""
+        return sharedPreferences.getString("My_Lang", "it") ?: "it"
     }
 
 }

@@ -36,6 +36,7 @@ class WorkoutActivity : AppCompatActivity() {
     private var lastSensorEventTime: Long = 0
 
     private var working = false
+    private var firstNotificationSent = false
 
 
 
@@ -112,14 +113,15 @@ class WorkoutActivity : AppCompatActivity() {
                 if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
                     val currentTime = System.currentTimeMillis()
 
-                    // Lascio scorrere almeno due minuti dopo che la prima notifica è stata inviata per evitare che vengano inviate più notifiche quando il telefono è stato preso in mano la stessa volta
-                    if (currentTime - lastSensorEventTime >  2 * 60 * 1000) {
+                     //Lascio scorrere almeno due minuti dopo che la prima notifica è stata inviata per evitare che vengano inviate più notifiche quando il telefono è stato preso in mano la stessa volta
+                    if (!firstNotificationSent && currentTime - lastSensorEventTime > 2 * 60 * 1000 && abs(event.values[0]) > 10) {
                         lastSensorEventTime = currentTime
 
-                        if (abs(event.values[0]) > 10) {
-                            // The phone has been picked up, start the timer
-                            startTimer()
-                        }
+                        // The phone has been picked up, start the timer
+                        startTimer()
+
+                        // Set the flag to true to indicate that the first notification has been sent
+                        firstNotificationSent = true
                     }
                 }
             }
@@ -197,13 +199,13 @@ class WorkoutActivity : AppCompatActivity() {
             "de" -> exercise.name_de
             "fr" -> exercise.name_fr
             "it" -> exercise.name_it
-            else -> exercise.name_en  // Fallback to default name
+            else -> exercise.name_it  // Fallback to default name
         }
     }
 
     private fun loadLocate(): String {
         val sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("My_Lang", "en") ?: "en"
+        return sharedPreferences.getString("My_Lang", "it") ?: "it"
     }
 
 
@@ -230,10 +232,13 @@ class WorkoutActivity : AppCompatActivity() {
 
                 // Update the existing notification with the new message
                 notificationHelper.sendUpdatableNotification(
-                    "Riprendi ad allenarti!",
-                    "Il timer sta per scadere. $secondsRemaining secondi rimasti.",
+                    getString(R.string.Riprendi),
+                    getString(R.string.Timer) + " $secondsRemaining " + getString(R.string.Rimasto),
                     notificationId
                 )
+
+
+
             }
 
             override fun onFinish() {
@@ -243,6 +248,8 @@ class WorkoutActivity : AppCompatActivity() {
                 // Reset the timer
                 countdownTimer = null
                 notificationHelper.cancelNotification(notificationId)
+
+                firstNotificationSent = false
 
                 // Show a success toast when the timer finishes
                 Toasty.success(this@WorkoutActivity, "Riprendi ad allenarti", Toast.LENGTH_SHORT, true).show()

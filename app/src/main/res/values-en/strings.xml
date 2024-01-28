@@ -19,13 +19,19 @@
     <string name="ad_title">Select your language</string>
     <string name="button_programme_new">Add Card</string>
     <string name="programmes_default_empty">The card database is empty.</string>
-
     <string name="set_id">ID</string>
     <string name="set_reps">Reps</string>
     <string name="set_weight">Weight</string>
     <string name="curr_weight">Weight</string>
     <string name="curr_reps">Repetitions</string>
     <string name="inizia_allenamento">Start training</string>
+    <string name="Riprendi">Get back to training!</string>
+    <string name="Timer">The timer is about to expire.</string>
+    <string name="Rimasto">seconds left.</string>
+    
+    
+    
+
     <string name="ferma_allenamento">Stop training</string>
 
 </resources>

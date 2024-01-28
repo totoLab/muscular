@@ -146,6 +146,6 @@ class ExercisesActivity : AppCompatActivity() {
     }
     private fun loadLocate(): String {
         val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
-        return sharedPreferences.getString("My_Lang", "en") ?: "en"
+        return sharedPreferences.getString("My_Lang", "it") ?: "it"
     }
 }
