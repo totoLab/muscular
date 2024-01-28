@@ -36,6 +36,7 @@ class WorkoutActivity : AppCompatActivity() {
     private var lastSensorEventTime: Long = 0
 
     private var working = false
+    private var firstNotificationSent = false
 
 
 
@@ -113,13 +114,14 @@ class WorkoutActivity : AppCompatActivity() {
                     val currentTime = System.currentTimeMillis()
 
                      //Lascio scorrere almeno due minuti dopo che la prima notifica è stata inviata per evitare che vengano inviate più notifiche quando il telefono è stato preso in mano la stessa volta
-                    if (currentTime - lastSensorEventTime >  2 * 60 * 1000) {
+                    if (!firstNotificationSent && currentTime - lastSensorEventTime > 2 * 60 * 1000 && abs(event.values[0]) > 10) {
                         lastSensorEventTime = currentTime
 
-                        if (abs(event.values[0]) > 10) {
-                            // The phone has been picked up, start the timer
-                            startTimer()
-                        }
+                        // The phone has been picked up, start the timer
+                        startTimer()
+
+                        // Set the flag to true to indicate that the first notification has been sent
+                        firstNotificationSent = true
                     }
                 }
             }
@@ -243,6 +245,8 @@ class WorkoutActivity : AppCompatActivity() {
                 // Reset the timer
                 countdownTimer = null
                 notificationHelper.cancelNotification(notificationId)
+
+                firstNotificationSent = false
 
                 // Show a success toast when the timer finishes
                 Toasty.success(this@WorkoutActivity, "Riprendi ad allenarti", Toast.LENGTH_SHORT, true).show()
