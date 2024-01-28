@@ -252,7 +252,7 @@ class WorkoutActivity : AppCompatActivity() {
                 firstNotificationSent = false
 
                 // Show a success toast when the timer finishes
-                Toasty.success(this@WorkoutActivity, "Riprendi ad allenarti", Toast.LENGTH_SHORT, true).show()
+                Toasty.success(this@WorkoutActivity, getString(R.string.Riprendi), Toast.LENGTH_SHORT, true).show()
             }
         }
 
