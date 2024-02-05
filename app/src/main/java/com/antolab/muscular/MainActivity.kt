@@ -1,33 +1,35 @@
 package com.antolab.muscular
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.antolab.muscular.MyApplication.Companion.appDao
+import com.antolab.muscular.geocoding.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.Locale
-import androidx.lifecycle.lifecycleScope
-import com.antolab.muscular.geocoding.*
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.*
 import org.osmdroid.views.*
 import org.osmdroid.views.overlay.mylocation.*
 import retrofit2.*
+import java.util.Locale
+import android.Manifest
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var notificationHelper: NotificationHelper
+
+    private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1
+    private val GEOLOCATION_PERMISSION_REQUEST_CODE = 2
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,6 +58,78 @@ class MainActivity : AppCompatActivity() {
         }
 
         loadLocate()
+
+        // Check and request notification permissions
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Display a rationale to the user
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            ) {
+                // Show an explanation to the user
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("We need notification permissions to keep you updated on important events.")
+                builder.setPositiveButton(
+                    "OK"
+                ) { dialog, which -> // Request the permission again
+                    ActivityCompat.requestPermissions(
+                        this@MainActivity,
+                        arrayOf<String>(Manifest.permission.POST_NOTIFICATIONS),
+                        NOTIFICATION_PERMISSION_REQUEST_CODE
+                    )
+                }
+                builder.show()
+            } else {
+                // Request the permission
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf<String>(Manifest.permission.POST_NOTIFICATIONS),
+                    NOTIFICATION_PERMISSION_REQUEST_CODE
+                )
+            }
+        }
+
+        // Check and request geolocation permissions
+
+        // Check and request geolocation permissions
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Display a rationale to the user
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
+                // Show an explanation to the user
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("We need geolocation permissions to provide location-based services.")
+                builder.setPositiveButton(
+                    "OK"
+                ) { dialog, which -> // Request the permission again
+                    ActivityCompat.requestPermissions(
+                        this@MainActivity,
+                        arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                        GEOLOCATION_PERMISSION_REQUEST_CODE
+                    )
+                }
+                builder.show()
+            } else {
+                // Request the permission
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                    GEOLOCATION_PERMISSION_REQUEST_CODE
+                )
+            }
+        }
 
         // Example notification
         notificationHelper = NotificationHelper(this)

@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.IBinder
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.antolab.muscular.MyApplication.Companion.appDao
 import com.antolab.muscular.db.ExerciseEntity
 import com.antolab.muscular.geocoding.*
@@ -41,11 +43,14 @@ class LocationBackgroundService : Service() {
     private val LOGGING_TAG = "geocoding"
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Log.e(LOGGING_TAG, "service can't start for lack of location permission")
+            stopSelf();
+            return START_NOT_STICKY;
+        }
         notificationHelper = NotificationHelper(this)
-        // Schedule the periodic execution of your task
         handler.postDelayed(locationTask, 45*60*100) // Execute every 4.5 minutes
-
+        Log.d(LOGGING_TAG, "service started")
         return START_STICKY
     }
 
