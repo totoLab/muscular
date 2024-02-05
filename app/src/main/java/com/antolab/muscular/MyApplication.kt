@@ -102,8 +102,6 @@ class MyApplication : Application() {
             Log.e("RoomDatabase", "Error creating database", e)
         }
 
-        val serviceIntent = Intent(this, LocationBackgroundService::class.java)
-        startService(serviceIntent)
     }
 
 }

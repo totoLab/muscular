@@ -22,6 +22,7 @@ import org.osmdroid.views.overlay.mylocation.*
 import retrofit2.*
 import java.util.Locale
 import android.Manifest
+import android.util.Log
 
 
 class MainActivity : AppCompatActivity() {
@@ -95,8 +96,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Check and request geolocation permissions
-
-        // Check and request geolocation permissions
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -131,15 +130,34 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Example notification
-        notificationHelper = NotificationHelper(this)
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            NOTIFICATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    notificationHelper = NotificationHelper(this)
 
-        //esempio di notifica periodica, con true invia anche una notifica all'avvio, altrimenti no
-        notificationHelper.sendPeriodicNotification(
-            getString(R.string.FreshTime),
-            getString(R.string.StayHydrated),
-            60 * 60 * 1000,
-            true) // Ogni ora in millisecondi
+                    //esempio di notifica periodica, con true invia anche una notifica all'avvio, altrimenti no
+                    notificationHelper.sendPeriodicNotification(
+                        getString(R.string.FreshTime), getString(R.string.StayHydrated),
+                        60 * 60 * 1000, true)
+                }
+            }
+            GEOLOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("intents", "starting background service")
+                    val serviceIntent = Intent(this, LocationBackgroundService::class.java)
+                    startService(serviceIntent)
+                }
+            }
+            else -> {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            }
+        }
     }
 
     private fun startNewActivity(activityClass: Class<*>) {
