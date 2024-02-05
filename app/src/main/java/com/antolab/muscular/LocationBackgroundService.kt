@@ -43,7 +43,7 @@ class LocationBackgroundService : Service() {
     private val LOGGING_TAG = "geocoding"
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e(LOGGING_TAG, "service can't start for lack of location permission")
             stopSelf();
             return START_NOT_STICKY;
