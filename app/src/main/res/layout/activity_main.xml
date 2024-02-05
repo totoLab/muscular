@@ -51,8 +51,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="328dp"
-        android:layout_height="401dp"
+        android:layout_width="350dp"
+        android:layout_height="400dp"
         android:layout_marginTop="30dp"
         app:layout_constraintBottom_toTopOf="@+id/mainButtonNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +100,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"></org.osmdroid.views.MapView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

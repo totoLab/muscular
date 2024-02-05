@@ -1,23 +1,33 @@
 package com.antolab.muscular
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.antolab.muscular.MyApplication.Companion.appDao
-import com.antolab.muscular.utils.PrePopulation
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.Locale
 import androidx.lifecycle.lifecycleScope
-
+import com.antolab.muscular.geocoding.*
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.*
+import org.osmdroid.views.*
+import org.osmdroid.views.overlay.mylocation.*
+import retrofit2.*
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var notificationHelper: NotificationHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,13 +58,7 @@ class MainActivity : AppCompatActivity() {
         loadLocate()
 
         // Example notification
-        val notificationHelper = NotificationHelper(this)
-
-        notificationHelper.sendCustomNotification("CM", "U cunnu e mammata")
-        // Example periodic notification
-        notificationHelper.sendPeriodicNotification("CZ", "Cunnu e ziata", 60 * 1000, true)
-
-
+        notificationHelper = NotificationHelper(this)
 
         //esempio di notifica periodica, con true invia anche una notifica all'avvio, altrimenti no
         notificationHelper.sendPeriodicNotification(
@@ -64,6 +68,87 @@ class MainActivity : AppCompatActivity() {
             true) // Ogni ora in millisecondi
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        // todo: move this thing in a place to be executed periodically in background
+        val map = findViewById<MapView>(R.id.map)
+        map.visibility = View.GONE
+        val myLocation: GeoPoint = setMapView(map)
+        val defaultGymQuery = "via marconi rende"
+        val minDistance: Double = 1.5 * 1000.0f
+        searchPoint(defaultGymQuery) { geoPoint ->
+            if (geoPoint != null) {
+                val distance = distanceBetween(myLocation, geoPoint)
+                Log.d("geocoding", "$distance")
+                if (distance < minDistance) {
+                    notificationHelper.sendCustomNotification("Pronto per allenarti", "Oggi scheda: Gambe") // TODO: differentiate notification based on day of week
+                } else {
+                    Log.d("geocoding", "Troppo distante dalla palestra ${distance}m")
+                }
+            } else {
+                Toast.makeText(this@MainActivity, "Impossibile trovare la palestra", Toast.LENGTH_LONG).show()
+            }
+        }
+
+    }
+    private fun searchPoint(query: String, callback: (GeoPoint?) -> Unit) {
+        val clientGeocoding = NominatimClient.create()
+
+        val geocodeCall = clientGeocoding.geocode(query)
+        val TAG = "geocoding"
+        geocodeCall.enqueue(object : Callback<List<GeocodingResult>> {
+            override fun onResponse(call: Call<List<GeocodingResult>>, response: Response<List<GeocodingResult>>) {
+                if (response.isSuccessful) {
+                    val res = response.body()
+                    if (!res.isNullOrEmpty()) {
+                        val firstResult = res[0]
+                        val geoPoint = GeoPoint(firstResult.lat, firstResult.lon)
+                        callback(geoPoint)
+                    } else {
+                        Log.d(TAG, "response was empty ${response.raw()}")
+                        callback(null)
+                    }
+                } else {
+                    Log.d(TAG, "response was not successful ${response.code()}")
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<List<GeocodingResult>>, t: Throwable) {
+                Log.d(TAG, "failed to send request")
+                t.printStackTrace()
+                callback(null)
+            }
+        })
+    }
+
+    private fun distanceBetween(g1: GeoPoint, g2: GeoPoint) : Double {
+        return g1.distanceToAsDouble(g2)
+    }
+
+    @SuppressLint("MissingPermission") // todo: enable permissions
+    private fun setMapView(view: MapView) : GeoPoint {
+        view.controller.setZoom(17.0)
+        view.setMultiTouchControls(true)
+        view.setTileSource(TileSourceFactory.MAPNIK)
+
+        /* Definizione un overlay che tramite un GPS provider Leqge la posizione corrente del dispositivo */
+        val myLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(this), view) // todo: remove view from deps of the function
+        myLocationOverlay.enableMyLocation()
+        view.overlays.add(myLocationOverlay)
+        myLocationOverlay.isDrawAccuracyEnabled = true
+
+        /* Alliavvio dell'app, al run dell'UI-Thread, viene impostato il centro della mappa sulla posizione corrente */
+        myLocationOverlay.runOnFirstFix {
+            runOnUiThread {
+                view.controller.setCenter(myLocationOverlay.myLocation)
+                view.controller.animateTo(myLocationOverlay.myLocation)
+            }
+        }
+        val defaultPoint = if (true) GeoPoint(39.3540611680632, 16.23071131350694) else GeoPoint(0, 0)
+        return myLocationOverlay.myLocation ?: defaultPoint
+    }
     private fun startNewActivity(activityClass: Class<*>) {
         val intent = Intent(this, activityClass)
         startActivity(intent)
