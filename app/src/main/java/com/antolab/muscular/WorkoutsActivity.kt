@@ -1,5 +1,6 @@
 package com.antolab.muscular
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -71,6 +72,7 @@ class WorkoutsActivity : AppCompatActivity() {
 
 
 
+    @SuppressLint("InflateParams")
     private fun showProgramme(container: LinearLayout, programme: ProgrammeEntity): Boolean {
         // Inflate the exercise template and make it visible
         val programmeElement : ConstraintLayout = layoutInflater.inflate(R.layout.programme_template, null) as ConstraintLayout
