@@ -1,11 +1,13 @@
 package com.antolab.muscular
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -13,13 +15,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.antolab.muscular.MyApplication.Companion.appDao
+import com.antolab.muscular.utils.LocationBackgroundService
+import com.antolab.muscular.utils.NotificationHelper
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.Locale
-import android.Manifest
-import android.util.Log
-import com.antolab.muscular.utils.LocationBackgroundService
-import com.antolab.muscular.utils.NotificationHelper
 
 
 class MainActivity : AppCompatActivity() {

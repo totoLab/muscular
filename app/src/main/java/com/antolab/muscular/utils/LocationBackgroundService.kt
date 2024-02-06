@@ -20,11 +20,11 @@ import org.osmdroid.util.GeoPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import java.time.Duration
 
 
 class LocationBackgroundService : Service() {

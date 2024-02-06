@@ -2,7 +2,6 @@ package com.antolab.muscular.geocoding
 
 import retrofit2.*
 import retrofit2.http.*
-import org.osmdroid.util.GeoPoint
 
 interface NominatimService {
     @GET("search")

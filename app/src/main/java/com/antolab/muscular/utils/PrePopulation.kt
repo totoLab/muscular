@@ -1,23 +1,20 @@
 package com.antolab.muscular.utils
 
 import android.app.*
+import android.content.Context
 import android.os.*
 import android.util.*
 import android.view.*
 import android.widget.*
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
+import com.antolab.muscular.MyApplication
 import com.antolab.muscular.db.*
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.*
-import android.content.Context
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
-
-import com.antolab.muscular.MyApplication
-import com.antolab.muscular.db.ProgrammeEntity
-
 
 
 class PrePopulation(private val context: Context, private var appDao: AppDao) {

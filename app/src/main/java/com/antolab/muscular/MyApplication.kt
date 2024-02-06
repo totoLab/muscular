@@ -2,12 +2,9 @@ package com.antolab.muscular
 
 import android.app.Application
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.antolab.muscular.db.AppDao
 import com.antolab.muscular.db.AppDatabase
 import kotlinx.coroutines.GlobalScope

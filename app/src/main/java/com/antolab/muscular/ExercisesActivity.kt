@@ -1,14 +1,23 @@
 package com.antolab.muscular
 
-import android.app.*
-import android.os.*
-import android.util.*
-import android.view.*
-import android.widget.*
+import android.app.Dialog
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.view.Window
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.*
-import com.antolab.muscular.db.*
-import com.antolab.muscular.utils.*
+import com.antolab.muscular.db.AppDao
+import com.antolab.muscular.db.ExerciseEntity
+import com.antolab.muscular.utils.PrePopulation
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+
 class ExercisesActivity : AppCompatActivity() {
     private lateinit var appDao: AppDao
     private lateinit var selectedLanguage: String
