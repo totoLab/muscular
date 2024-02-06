@@ -6,15 +6,7 @@ import retrofit2.http.*
 interface NominatimService {
     @GET("search")
     fun geocode(
-        @retrofit2.http.Query("q")query: String,
-        @retrofit2.http.Query("format")format: String = "json"
+        @Query("q")query: String,
+        @Query("format")format: String = "json"
     ): Call<List<GeocodingResult>>
-
-    @GET("reverse")
-    fun geocodeFromCoords(
-        @Query("lat") latitude: Double,
-        @Query("lon") longitude: Double,
-        @Query("format") format: String = "json"
-    ): Call<GeocodingResult>
-
 }
