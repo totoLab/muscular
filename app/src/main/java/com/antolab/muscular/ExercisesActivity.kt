@@ -1,5 +1,6 @@
 package com.antolab.muscular
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
@@ -117,8 +118,8 @@ class ExercisesActivity : AppCompatActivity() {
 
 
     private fun setImage(inflatedElement: RelativeLayout, imageName: String): Boolean {
-        var outcome: Boolean
-        var msg: String
+        val outcome: Boolean
+        val msg: String
 
         val id: Int = imageId(imageName) // assuming image resources are saved in res/drawable
         val imageThumbButton = inflatedElement.findViewById<ImageView>(R.id.image_thumb_button)
@@ -150,6 +151,7 @@ class ExercisesActivity : AppCompatActivity() {
         fullscreenDialog.show()
     }
 
+    @SuppressLint("DiscouragedApi")
     private fun imageId(imagePath: String) : Int {
         return resources.getIdentifier(imagePath, "drawable", packageName)
     }
