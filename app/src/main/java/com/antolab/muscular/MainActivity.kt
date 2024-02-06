@@ -204,11 +204,6 @@ class MainActivity : AppCompatActivity() {
             }
             recreate()
 
-            // Call updateUIElements within a coroutine
-            GlobalScope.launch {
-                updateUIElements()
-            }
-
             dialog.dismiss()
         }
 
@@ -227,47 +222,7 @@ class MainActivity : AppCompatActivity() {
         val editor = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
         editor.putString("My_Lang", lang)
         editor.apply()
-
-        // Update UI elements based on the selected language
-        updateUIElements()
     }
-
-    private fun updateUIElements() {
-        currentLanguage = loadLocate()
-        // Use the lifecycleScope for coroutine in an AppCompatActivity
-        lifecycleScope.launch {
-            // Retrieve exercises or other elements from the database based on the current language
-            val exercises = appDao.getAllExercises()
-
-            // Update UI elements with the new language-specific data
-            for (exercise in exercises) {
-                val name: String = when (currentLanguage) {
-                    "en" -> exercise.name_en
-                    "es" -> exercise.name_es
-                    "fr" -> exercise.name_fr
-                    "it" -> exercise.name_it
-                    "de" -> exercise.name_de
-                    else -> exercise.name_en // Default to English if language is not recognized
-                }
-
-                val description: String = when (currentLanguage) {
-                    "en" -> exercise.description_en
-                    "es" -> exercise.description_es
-                    "fr" -> exercise.description_fr
-                    "it" -> exercise.description_it
-                    "de" -> exercise.description_de
-                    else -> exercise.description_it // Default to English if language is not recognized
-                }
-
-                // Update UI elements using the name and description
-                // You can use these values to update TextViews, etc.
-            }
-        }
-    }
-
-
-
-
 
     private lateinit var currentLanguage: String
 
