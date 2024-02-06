@@ -50,7 +50,7 @@ class LocationBackgroundService : Service() {
         }
         notificationHelper = NotificationHelper(this)
         handler.postDelayed(locationTask, 45*60*100) // Execute every 4.5 minutes
-        Log.d(LOGGING_TAG, "service started")
+        Log.d(LOGGING_TAG, "service $this started")
         return START_STICKY
     }
 
