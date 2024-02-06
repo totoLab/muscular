@@ -101,8 +101,8 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
             val oldDb : MutableMap<String, Set> = readJsonFromFileSet(dbPath)
             Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
             for (setEntry in oldDb) {
-                var set = setEntry.value
-                var setEntity = SetEntity(
+                val set = setEntry.value
+                val setEntity = SetEntity(
                     id = 0,
                     exerciseId = set.exerciseId,
                     reps = set.reps,
@@ -151,9 +151,9 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
             val oldDb : MutableMap<String, PE> = readJsonFromFilePE(dbPath)
             Log.d(tag, "json DB loading: ${oldDb.toString()}")
             for (peEntry in oldDb) {
-                var pe = peEntry.value
+                val pe = peEntry.value
                 Log.d(tag, "Trying to add $pe")
-                var peEntity : PeEntity = PeEntity(
+                val peEntity = PeEntity(
                     programmeId = pe.programmeId,
                     exerciseId = pe.exerciseId,
                     restTimer = pe.restTimer
@@ -210,9 +210,9 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
             val oldDb: MutableMap<String, Programme> = readJsonFromFileProgramme(dbPath)
             Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
             for (programmeEntry in oldDb) {
-                var programme = programmeEntry.value
+                val programme = programmeEntry.value
                 Log.d("prepopulation", "Trying to add $programme")
-                var programmeEntity = ProgrammeEntity(
+                val programmeEntity = ProgrammeEntity(
                 name_en = programme.name_en,
                 name_es = programme.name_es,
                 name_de = programme.name_de,
