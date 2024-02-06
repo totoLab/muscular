@@ -93,6 +93,13 @@ class MainActivity : AppCompatActivity() {
                     NOTIFICATION_PERMISSION_REQUEST_CODE
                 )
             }
+        } else {
+            notificationHelper = NotificationHelper(this)
+
+            //esempio di notifica periodica, con true invia anche una notifica all'avvio, altrimenti no
+            notificationHelper.sendPeriodicNotification(
+                getString(R.string.FreshTime), getString(R.string.StayHydrated),
+                60 * 60 * 1000, true)
         }
 
         // Check and request geolocation permissions
@@ -128,6 +135,8 @@ class MainActivity : AppCompatActivity() {
                     GEOLOCATION_PERMISSION_REQUEST_CODE
                 )
             }
+        } else {
+            startService(LocationBackgroundService::class.java)
         }
 
     }
@@ -149,9 +158,7 @@ class MainActivity : AppCompatActivity() {
             }
             GEOLOCATION_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("intents", "starting background service")
-                    val serviceIntent = Intent(this, LocationBackgroundService::class.java)
-                    startService(serviceIntent)
+                    startService(LocationBackgroundService::class.java)
                 }
             }
             else -> {
@@ -160,6 +167,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun startService(serviceClass: Class<*>) {
+        Log.d("services", "starting service ${serviceClass.canonicalName}")
+        val serviceIntent = Intent(this, serviceClass)
+        startService(serviceIntent)
+    }
     private fun startNewActivity(activityClass: Class<*>) {
         val intent = Intent(this, activityClass)
         startActivity(intent)
