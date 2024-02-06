@@ -13,16 +13,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.antolab.muscular.MyApplication.Companion.appDao
-import com.antolab.muscular.geocoding.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.osmdroid.util.*
-import org.osmdroid.views.*
-import org.osmdroid.views.overlay.mylocation.*
-import retrofit2.*
 import java.util.Locale
 import android.Manifest
 import android.util.Log
+import com.antolab.muscular.utils.LocationBackgroundService
+import com.antolab.muscular.utils.NotificationHelper
 
 
 class MainActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.antolab.muscular
+package com.antolab.muscular.utils
 
 import android.annotation.SuppressLint
 import android.app.Service
@@ -8,12 +8,10 @@ import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.IBinder
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.antolab.muscular.MyApplication
 import com.antolab.muscular.MyApplication.Companion.appDao
-import com.antolab.muscular.db.ExerciseEntity
 import com.antolab.muscular.geocoding.*
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.MainScope

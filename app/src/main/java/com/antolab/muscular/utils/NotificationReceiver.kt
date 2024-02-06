@@ -1,4 +1,4 @@
-package com.antolab.muscular
+package com.antolab.muscular.utils
 
 import android.content.BroadcastReceiver
 import android.content.Context

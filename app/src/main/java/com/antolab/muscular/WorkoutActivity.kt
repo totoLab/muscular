@@ -22,6 +22,7 @@ import androidx.core.content.edit
 import com.antolab.muscular.db.AppDao
 import com.antolab.muscular.db.ExerciseEntity
 import com.antolab.muscular.db.SetEntity
+import com.antolab.muscular.utils.NotificationHelper
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

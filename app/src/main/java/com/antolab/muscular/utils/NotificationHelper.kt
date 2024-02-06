@@ -1,4 +1,4 @@
-package com.antolab.muscular
+package com.antolab.muscular.utils
 
 import android.Manifest
 import android.app.AlarmManager
@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.antolab.muscular.R
 import java.util.Calendar
 
 class NotificationHelper(private val context: Context) {
