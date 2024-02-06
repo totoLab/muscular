@@ -23,9 +23,6 @@ import retrofit2.Response
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
-
 
 class LocationBackgroundService : Service() {
 
@@ -42,8 +39,8 @@ class LocationBackgroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e(LOGGING_TAG, "service can't start for lack of location permission")
-            stopSelf();
-            return START_NOT_STICKY;
+            stopSelf()
+            return START_NOT_STICKY
         }
         notificationHelper = NotificationHelper(this)
         handler.postDelayed(locationTask, 45*60*100) // Execute every 4.5 minutes
