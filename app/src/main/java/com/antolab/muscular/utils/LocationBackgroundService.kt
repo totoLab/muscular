@@ -29,7 +29,6 @@ import java.util.Locale
 
 class LocationBackgroundService : Service() {
 
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.ENGLISH)
     private val timeZoneId = ZoneId.of("Etc/UTC")
     private lateinit var lastNotificationSent: ZonedDateTime
 
@@ -64,7 +63,7 @@ class LocationBackgroundService : Service() {
                         val distance = distanceBetween(updatedLocation, geoPoint)
                         Log.d(LOGGING_TAG, "Distance from gym ($geoPoint): $distance")
                         if (distance < minDistance) {
-                            val zdtNow = ZonedDateTime.now()
+                            val zdtNow = ZonedDateTime.now(timeZoneId)
                             if (!::lastNotificationSent.isInitialized || hasTimeElapsed(lastNotificationSent, zdtNow, 15)) {
                                 lastNotificationSent = zdtNow
                                 sendNotification(zdtNow)
