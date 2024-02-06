@@ -28,7 +28,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/button_exercise_new"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></TextView>
+                app:layout_constraintTop_toTopOf="parent"> </TextView>
 
             <Button
                 android:id="@+id/button_exercise_new"
@@ -41,10 +41,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/exercices_default_empty"
+            android:id="@+id/exercises_default_empty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/exercises_default_empty"
-            android:visibility="invisible"></TextView>
+            android:visibility="invisible"> </TextView>
     </LinearLayout>
 </ScrollView>

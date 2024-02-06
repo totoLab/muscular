@@ -52,7 +52,7 @@ class ExercisesActivity : AppCompatActivity() {
 
         MainScope().launch {
             if (appDao.getExercisesCount() == 0) {
-                val empty = findViewById<TextView>(R.id.exercices_default_empty)
+                val empty = findViewById<TextView>(R.id.exercises_default_empty)
                 empty.visibility = View.VISIBLE
                 return@launch
             } else {
