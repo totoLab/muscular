@@ -3,20 +3,33 @@ package com.antolab.muscular
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.antolab.muscular.MyApplication.Companion.appDao
-import com.antolab.muscular.utils.PrePopulation
+import com.antolab.muscular.geocoding.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.osmdroid.util.*
+import org.osmdroid.views.*
+import org.osmdroid.views.overlay.mylocation.*
+import retrofit2.*
 import java.util.Locale
-import androidx.lifecycle.lifecycleScope
+import android.Manifest
+import android.util.Log
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var notificationHelper: NotificationHelper
+
+    private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1
+    private val GEOLOCATION_PERMISSION_REQUEST_CODE = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,23 +60,118 @@ class MainActivity : AppCompatActivity() {
 
         loadLocate()
 
-        // Example notification
-        val notificationHelper = NotificationHelper(this)
+        // Check and request notification permissions
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Display a rationale to the user
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            ) {
+                // Show an explanation to the user
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("We need notification permissions to keep you updated on important events.")
+                builder.setPositiveButton(
+                    "OK"
+                ) { dialog, which -> // Request the permission again
+                    ActivityCompat.requestPermissions(
+                        this@MainActivity,
+                        arrayOf<String>(Manifest.permission.POST_NOTIFICATIONS),
+                        NOTIFICATION_PERMISSION_REQUEST_CODE
+                    )
+                }
+                builder.show()
+            } else {
+                // Request the permission
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf<String>(Manifest.permission.POST_NOTIFICATIONS),
+                    NOTIFICATION_PERMISSION_REQUEST_CODE
+                )
+            }
+        } else {
+            notificationHelper = NotificationHelper(this)
 
-        notificationHelper.sendCustomNotification("CM", "U cunnu e mammata")
-        // Example periodic notification
-        notificationHelper.sendPeriodicNotification("CZ", "Cunnu e ziata", 60 * 1000, true)
+            //esempio di notifica periodica, con true invia anche una notifica all'avvio, altrimenti no
+            notificationHelper.sendPeriodicNotification(
+                getString(R.string.FreshTime), getString(R.string.StayHydrated),
+                60 * 60 * 1000, true)
+        }
 
+        // Check and request geolocation permissions
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Display a rationale to the user
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
+                // Show an explanation to the user
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("We need geolocation permissions to provide location-based services.")
+                builder.setPositiveButton(
+                    "OK"
+                ) { dialog, which -> // Request the permission again
+                    ActivityCompat.requestPermissions(
+                        this@MainActivity,
+                        arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                        GEOLOCATION_PERMISSION_REQUEST_CODE
+                    )
+                }
+                builder.show()
+            } else {
+                // Request the permission
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                    GEOLOCATION_PERMISSION_REQUEST_CODE
+                )
+            }
+        } else {
+            startService(LocationBackgroundService::class.java)
+        }
 
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            NOTIFICATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    notificationHelper = NotificationHelper(this)
 
-        //esempio di notifica periodica, con true invia anche una notifica all'avvio, altrimenti no
-        notificationHelper.sendPeriodicNotification(
-            getString(R.string.FreshTime),
-            getString(R.string.StayHydrated),
-            60 * 60 * 1000,
-            true) // Ogni ora in millisecondi
+                    //esempio di notifica periodica, con true invia anche una notifica all'avvio, altrimenti no
+                    notificationHelper.sendPeriodicNotification(
+                        getString(R.string.FreshTime), getString(R.string.StayHydrated),
+                        60 * 60 * 1000, true)
+                }
+            }
+            GEOLOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startService(LocationBackgroundService::class.java)
+                }
+            }
+            else -> {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            }
+        }
     }
 
+    private fun startService(serviceClass: Class<*>) {
+        Log.d("services", "starting service ${serviceClass.canonicalName}")
+        val serviceIntent = Intent(this, serviceClass)
+        startService(serviceIntent)
+    }
     private fun startNewActivity(activityClass: Class<*>) {
         val intent = Intent(this, activityClass)
         startActivity(intent)

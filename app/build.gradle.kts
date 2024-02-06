@@ -9,6 +9,7 @@ room {
     schemaDirectory("$projectDir/schemas")
 }
 
+
 android {
     namespace = "com.antolab.muscular"
     compileSdk = 34
@@ -63,4 +64,11 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.room:room-paging:$roomVer")
     androidTestImplementation("androidx.room:room-testing:$roomVer")
+
+    implementation("org.osmdroid:osmdroid-android:6.1.17")
+    implementation("org.osmdroid:osmdroid-mapsforge:6.1.10")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 }

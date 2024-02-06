@@ -2,6 +2,7 @@ package com.antolab.muscular
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.room.Room
@@ -100,6 +101,7 @@ class MyApplication : Application() {
         } catch (e: Exception) {
             Log.e("RoomDatabase", "Error creating database", e)
         }
+
     }
 
 }
