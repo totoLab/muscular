@@ -1,4 +1,4 @@
-package com.antolab.muscular
+package com.antolab.muscular.utils
 
 import android.Manifest
 import android.app.AlarmManager
@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.antolab.muscular.R
 import java.util.Calendar
 
 class NotificationHelper(private val context: Context) {
@@ -20,8 +21,6 @@ class NotificationHelper(private val context: Context) {
         private const val CHANNEL_NAME = "My Channel"
         private const val CHANNEL_DESCRIPTION = "Description of my channel"
     }
-
-
 
     // Metodo per inviare una notifica periodica con titolo, contenuto e intervallo di tempo
     fun sendPeriodicNotification(title: String, content: String, intervalMillis: Long, instant : Boolean) {
@@ -40,10 +39,8 @@ class NotificationHelper(private val context: Context) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
 
-        // Calcola il prossimo avviso dopo l'intervallo specificato
         val nextOccurrence = calendar.timeInMillis + intervalMillis
 
-        // Imposta l'allarme per la notifica periodica
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             nextOccurrence,
@@ -51,7 +48,7 @@ class NotificationHelper(private val context: Context) {
             pendingIntent
         )
 
-        // Invia anche una notifica immediata
+        // Invia anche una notifica prima dell'inizio del primo timer
         if (instant) {
             showNotification(title, content)
         }
@@ -71,16 +68,10 @@ class NotificationHelper(private val context: Context) {
         notificationManager.createNotificationChannel(channel)
     }
 
-
-
-
     fun sendCustomNotification(title: String, content: String) {
         val notificationId = System.currentTimeMillis().toInt()
         showNotification(title, content, notificationId)
     }
-
-
-
 
     fun showNotification(
         title: String,
@@ -125,7 +116,6 @@ class NotificationHelper(private val context: Context) {
                 return
             }
 
-            // Use the same notificationId to update the existing notification
             notify(notificationId, builder.build())
         }
     }

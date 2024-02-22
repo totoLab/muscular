@@ -1,28 +1,23 @@
 package com.antolab.muscular.utils
 
 import android.app.*
+import android.content.Context
 import android.os.*
 import android.util.*
 import android.view.*
 import android.widget.*
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
+import com.antolab.muscular.MyApplication
 import com.antolab.muscular.db.*
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.*
-import android.content.Context
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
-
-import com.antolab.muscular.MyApplication
-import com.antolab.muscular.db.ProgrammeEntity
-
 
 
 class PrePopulation(private val context: Context, private var appDao: AppDao) {
-
-
 
     init {
         val database = MyApplication.appDatabase
@@ -78,11 +73,8 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
     private fun readJsonFromFileExercise(fileName: String): MutableMap<String, ExerciseWithTranslations> {
         val jsonString = StringBuilder()
         try {
-            // Open the file input stream
             context.assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
                 BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         jsonString.append(line)
@@ -104,8 +96,8 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
             val oldDb : MutableMap<String, Set> = readJsonFromFileSet(dbPath)
             Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
             for (setEntry in oldDb) {
-                var set = setEntry.value
-                var setEntity = SetEntity(
+                val set = setEntry.value
+                val setEntity = SetEntity(
                     id = 0,
                     exerciseId = set.exerciseId,
                     reps = set.reps,
@@ -125,15 +117,11 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
         @SerializedName("weight") val weight: Int
     )
 
-
     private fun readJsonFromFileSet(fileName: String): MutableMap<String, Set> {
         val jsonString = StringBuilder()
         try {
-            // Open the file input stream
             context.assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
                 BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         jsonString.append(line)
@@ -154,9 +142,9 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
             val oldDb : MutableMap<String, PE> = readJsonFromFilePE(dbPath)
             Log.d(tag, "json DB loading: ${oldDb.toString()}")
             for (peEntry in oldDb) {
-                var pe = peEntry.value
+                val pe = peEntry.value
                 Log.d(tag, "Trying to add $pe")
-                var peEntity : PeEntity = PeEntity(
+                val peEntity = PeEntity(
                     programmeId = pe.programmeId,
                     exerciseId = pe.exerciseId,
                     restTimer = pe.restTimer
@@ -174,15 +162,11 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
         @SerializedName("restTimer") val restTimer: Long
     )
 
-
     private fun readJsonFromFilePE(fileName: String): MutableMap<String, PE> {
         val jsonString = StringBuilder()
         try {
-            // Open the file input stream
             context.assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
                 BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         jsonString.append(line)
@@ -203,9 +187,7 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
         @ColumnInfo(name = "name_fr") val name_fr: String,
         @ColumnInfo(name = "name_de") val name_de: String,
         @ColumnInfo(name = "name_it") val name_it: String
-        // Add other columns as needed
     )
-
 
     suspend fun programmesPrepopulation() {
         withContext(Dispatchers.IO) {
@@ -213,9 +195,9 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
             val oldDb: MutableMap<String, Programme> = readJsonFromFileProgramme(dbPath)
             Log.d("prepopulation", "json DB loading: ${oldDb.toString()}")
             for (programmeEntry in oldDb) {
-                var programme = programmeEntry.value
+                val programme = programmeEntry.value
                 Log.d("prepopulation", "Trying to add $programme")
-                var programmeEntity = ProgrammeEntity(
+                val programmeEntity = ProgrammeEntity(
                 name_en = programme.name_en,
                 name_es = programme.name_es,
                 name_de = programme.name_de,
@@ -230,15 +212,11 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
         }
     }
 
-
     private fun readJsonFromFileProgramme(fileName: String): MutableMap<String, Programme> {
         val jsonString = StringBuilder()
         try {
-            // Open the file input stream
             context.assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
                 BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         jsonString.append(line)

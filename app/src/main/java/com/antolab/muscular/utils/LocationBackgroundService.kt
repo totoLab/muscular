@@ -1,4 +1,4 @@
-package com.antolab.muscular
+package com.antolab.muscular.utils
 
 import android.annotation.SuppressLint
 import android.app.Service
@@ -8,12 +8,10 @@ import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.IBinder
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.antolab.muscular.MyApplication
 import com.antolab.muscular.MyApplication.Companion.appDao
-import com.antolab.muscular.db.ExerciseEntity
 import com.antolab.muscular.geocoding.*
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.MainScope
@@ -22,22 +20,20 @@ import org.osmdroid.util.GeoPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
-import java.time.Duration
-
 
 class LocationBackgroundService : Service() {
 
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.ENGLISH)
     private val timeZoneId = ZoneId.of("Etc/UTC")
     private lateinit var lastNotificationSent: ZonedDateTime
 
     private val handler = Handler()
     private lateinit var notificationHelper: NotificationHelper
-    private val defaultGymQuery = if (true) "via nicola giunta" else "via marconi rende"
+
+    // assuming this is the gym chosen from the user
+    private val defaultGymQuery = if (false) "via nicola giunta" else "via marconi rende"
     private val minDistance: Double = 3.0 * 1000.0f
 
     private val LOGGING_TAG = "geocoding"
@@ -45,8 +41,8 @@ class LocationBackgroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e(LOGGING_TAG, "service can't start for lack of location permission")
-            stopSelf();
-            return START_NOT_STICKY;
+            stopSelf()
+            return START_NOT_STICKY
         }
         notificationHelper = NotificationHelper(this)
         handler.postDelayed(locationTask, 45*60*100) // Execute every 4.5 minutes
@@ -66,7 +62,7 @@ class LocationBackgroundService : Service() {
                         val distance = distanceBetween(updatedLocation, geoPoint)
                         Log.d(LOGGING_TAG, "Distance from gym ($geoPoint): $distance")
                         if (distance < minDistance) {
-                            val zdtNow = ZonedDateTime.now()
+                            val zdtNow = ZonedDateTime.now(timeZoneId)
                             if (!::lastNotificationSent.isInitialized || hasTimeElapsed(lastNotificationSent, zdtNow, 15)) {
                                 lastNotificationSent = zdtNow
                                 sendNotification(zdtNow)
@@ -156,7 +152,7 @@ class LocationBackgroundService : Service() {
         return g1.distanceToAsDouble(g2)
     }
 
-    @SuppressLint("MissingPermission") // todo: ask for permissions
+    @SuppressLint("MissingPermission") // assuming this is called only when permission is already granted
     private fun getCurrentLocation(callback: (GeoPoint) -> Unit) {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 

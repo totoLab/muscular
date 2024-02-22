@@ -1,6 +1,8 @@
 package com.antolab.muscular.db
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "exercises")
 data class ExerciseEntity(
@@ -44,5 +46,5 @@ data class ExerciseEntity(
     val description_it: String,
 
     @ColumnInfo(name = "language")
-    val language: String = "en"  // Default language, you might want to change this
+    val language: String = "en"  // Default language
 )

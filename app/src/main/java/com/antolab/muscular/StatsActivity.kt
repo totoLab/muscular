@@ -1,8 +1,8 @@
 package com.antolab.muscular
 
+import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import android.os.*
-import android.widget.*
 
 class StatsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

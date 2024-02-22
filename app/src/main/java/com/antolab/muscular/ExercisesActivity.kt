@@ -1,14 +1,24 @@
 package com.antolab.muscular
 
-import android.app.*
-import android.os.*
-import android.util.*
-import android.view.*
-import android.widget.*
+import android.annotation.SuppressLint
+import android.app.Dialog
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.view.Window
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.*
-import com.antolab.muscular.db.*
-import com.antolab.muscular.utils.*
+import com.antolab.muscular.db.AppDao
+import com.antolab.muscular.db.ExerciseEntity
+import com.antolab.muscular.utils.PrePopulation
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+
 class ExercisesActivity : AppCompatActivity() {
     private lateinit var appDao: AppDao
     private lateinit var selectedLanguage: String
@@ -20,7 +30,7 @@ class ExercisesActivity : AppCompatActivity() {
         val database = MyApplication.appDatabase
         appDao = database.appDao()
 
-        // Load selected language from SharedPreferences
+        // Load language from SharedPreferences
         selectedLanguage = loadLocate()
 
         val buttonAdd: Button = findViewById(R.id.button_exercise_new)
@@ -43,7 +53,7 @@ class ExercisesActivity : AppCompatActivity() {
 
         MainScope().launch {
             if (appDao.getExercisesCount() == 0) {
-                val empty = findViewById<TextView>(R.id.exercices_default_empty)
+                val empty = findViewById<TextView>(R.id.exercises_default_empty)
                 empty.visibility = View.VISIBLE
                 return@launch
             } else {
@@ -108,8 +118,8 @@ class ExercisesActivity : AppCompatActivity() {
 
 
     private fun setImage(inflatedElement: RelativeLayout, imageName: String): Boolean {
-        var outcome: Boolean
-        var msg: String
+        val outcome: Boolean
+        val msg: String
 
         val id: Int = imageId(imageName) // assuming image resources are saved in res/drawable
         val imageThumbButton = inflatedElement.findViewById<ImageView>(R.id.image_thumb_button)
@@ -129,9 +139,7 @@ class ExercisesActivity : AppCompatActivity() {
         return outcome
     }
 
-
     fun showFullscreenImage(imageId: Int) {
-        // Create a dialog with a custom layout
         val fullscreenDialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         fullscreenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         fullscreenDialog.setContentView(R.layout.dialog_fullscreen_image)
@@ -141,6 +149,7 @@ class ExercisesActivity : AppCompatActivity() {
         fullscreenDialog.show()
     }
 
+    @SuppressLint("DiscouragedApi")
     private fun imageId(imagePath: String) : Int {
         return resources.getIdentifier(imagePath, "drawable", packageName)
     }

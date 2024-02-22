@@ -15,5 +15,4 @@ data class ProgrammeEntity(
     @ColumnInfo(name = "name_fr") val name_fr: String,
     @ColumnInfo(name = "name_de") val name_de: String,
     @ColumnInfo(name = "name_it") val name_it: String
-    // Add other columns as needed
 )

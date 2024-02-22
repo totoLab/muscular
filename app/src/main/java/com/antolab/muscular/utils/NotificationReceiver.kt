@@ -1,4 +1,4 @@
-package com.antolab.muscular
+package com.antolab.muscular.utils
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -15,11 +15,10 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.d("NotificationReceiver", "Received notification broadcast")
 
-        // Get title and content from the intent
         val title = intent?.getStringExtra(EXTRA_TITLE) ?: "Default Title"
         val content = intent?.getStringExtra(EXTRA_CONTENT) ?: "Default Content"
 
-        // Create an instance of NotificationHelper and show the notification
+        // use the NotificationHelper to show the notification
         NotificationHelper(context!!).showNotification(title, content)
 
     }
