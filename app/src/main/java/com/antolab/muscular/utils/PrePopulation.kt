@@ -73,11 +73,8 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
     private fun readJsonFromFileExercise(fileName: String): MutableMap<String, ExerciseWithTranslations> {
         val jsonString = StringBuilder()
         try {
-            // Open the file input stream
             context.assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
                 BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         jsonString.append(line)
@@ -123,11 +120,8 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
     private fun readJsonFromFileSet(fileName: String): MutableMap<String, Set> {
         val jsonString = StringBuilder()
         try {
-            // Open the file input stream
             context.assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
                 BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         jsonString.append(line)
@@ -171,11 +165,8 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
     private fun readJsonFromFilePE(fileName: String): MutableMap<String, PE> {
         val jsonString = StringBuilder()
         try {
-            // Open the file input stream
             context.assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
                 BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         jsonString.append(line)
@@ -196,7 +187,6 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
         @ColumnInfo(name = "name_fr") val name_fr: String,
         @ColumnInfo(name = "name_de") val name_de: String,
         @ColumnInfo(name = "name_it") val name_it: String
-        // Add other columns as needed
     )
 
     suspend fun programmesPrepopulation() {
@@ -225,11 +215,8 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
     private fun readJsonFromFileProgramme(fileName: String): MutableMap<String, Programme> {
         val jsonString = StringBuilder()
         try {
-            // Open the file input stream
             context.assets.open(fileName).use { inputStream ->
-                // Create a buffered reader
                 BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    // Read the file line by line
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         jsonString.append(line)
