@@ -19,8 +19,6 @@ import java.io.*
 
 class PrePopulation(private val context: Context, private var appDao: AppDao) {
 
-
-
     init {
         val database = MyApplication.appDatabase
         appDao = database.appDao()
@@ -122,7 +120,6 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
         @SerializedName("weight") val weight: Int
     )
 
-
     private fun readJsonFromFileSet(fileName: String): MutableMap<String, Set> {
         val jsonString = StringBuilder()
         try {
@@ -171,7 +168,6 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
         @SerializedName("restTimer") val restTimer: Long
     )
 
-
     private fun readJsonFromFilePE(fileName: String): MutableMap<String, PE> {
         val jsonString = StringBuilder()
         try {
@@ -203,7 +199,6 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
         // Add other columns as needed
     )
 
-
     suspend fun programmesPrepopulation() {
         withContext(Dispatchers.IO) {
             val dbPath = "programmes.json"
@@ -226,7 +221,6 @@ class PrePopulation(private val context: Context, private var appDao: AppDao) {
             Log.d("prepopulation", allProgrammes.toString())
         }
     }
-
 
     private fun readJsonFromFileProgramme(fileName: String): MutableMap<String, Programme> {
         val jsonString = StringBuilder()

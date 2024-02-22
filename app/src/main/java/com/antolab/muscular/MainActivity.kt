@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1
     private val GEOLOCATION_PERMISSION_REQUEST_CODE = 2
 
+    private lateinit var currentLanguage: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -54,24 +56,23 @@ class MainActivity : AppCompatActivity() {
 
         loadLocate()
 
-        // Check and request notification permissions
+        // check and request notification permissions
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // Display a rationale to the user
+            // show an explanation to the user
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this,
                     Manifest.permission.POST_NOTIFICATIONS
                 )
             ) {
-                // Show an explanation to the user
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("We need notification permissions to keep you updated on important events.")
                 builder.setPositiveButton(
                     "OK"
-                ) { dialog, which -> // Request the permission again
+                ) { dialog, which -> // request the permission again
                     ActivityCompat.requestPermissions(
                         this@MainActivity,
                         arrayOf<String>(Manifest.permission.POST_NOTIFICATIONS),
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 builder.show()
             } else {
-                // Request the permission
+                // actually request the permission
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf<String>(Manifest.permission.POST_NOTIFICATIONS),
@@ -96,24 +97,23 @@ class MainActivity : AppCompatActivity() {
                 60 * 60 * 1000, true)
         }
 
-        // Check and request geolocation permissions
+        // check and request geolocation permissions
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // Display a rationale to the user
+            // show an explanation to the user
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this,
                     Manifest.permission.ACCESS_FINE_LOCATION
                 )
             ) {
-                // Show an explanation to the user
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("We need geolocation permissions to provide location-based services.")
                 builder.setPositiveButton(
                     "OK"
-                ) { dialog, which -> // Request the permission again
+                ) { dialog, which -> // raequest the permission again
                     ActivityCompat.requestPermissions(
                         this@MainActivity,
                         arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 builder.show()
             } else {
-                // Request the permission
+                // actually request the permission
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -178,16 +178,14 @@ class MainActivity : AppCompatActivity() {
             "fr" to "Français",
             "it" to "Italiano",
             "de" to "Deutsch"
-            // Add more countries as needed
+            // add more countries as needed
         )
 
         val listItems = countriesMap.values.toTypedArray()
-
-        // Get the current language
         val currentLang = loadLocate()
         val langIndex: Int = listItems.indexOf(countriesMap[currentLang])
 
-        // Create an AlertDialog
+        // create an AlertDialog
         val mBuilder = AlertDialog.Builder(this@MainActivity)
         mBuilder.setTitle(R.string.ad_title)
 
@@ -200,7 +198,6 @@ class MainActivity : AppCompatActivity() {
                 4 -> setLocate("de") // Deutsch
             }
             recreate()
-
             dialog.dismiss()
         }
 
@@ -220,8 +217,6 @@ class MainActivity : AppCompatActivity() {
         editor.putString("My_Lang", lang)
         editor.apply()
     }
-
-    private lateinit var currentLanguage: String
 
     private fun loadLocate(): String {
         val sharedPreferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE)

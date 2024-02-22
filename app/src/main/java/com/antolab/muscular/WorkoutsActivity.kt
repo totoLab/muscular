@@ -25,8 +25,6 @@ class WorkoutsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workouts)
 
-
-
         val database = MyApplication.appDatabase
         appDao = database.appDao()
 
@@ -69,8 +67,6 @@ class WorkoutsActivity : AppCompatActivity() {
         val container = findViewById<LinearLayout>(R.id.container) ?: return
         container.removeAllViews()
     }
-
-
 
     @SuppressLint("InflateParams")
     private fun showProgramme(container: LinearLayout, programme: ProgrammeEntity): Boolean {

@@ -23,8 +23,6 @@ class MyApplication : Application() {
 
         try {
             sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-
-            // Retrieve the selected language from shared preferences
             val defaultLanguage = sharedPreferences.getString("selectedLanguage", "en") ?: "en"
 
             appDatabase = Room.databaseBuilder(
@@ -35,7 +33,6 @@ class MyApplication : Application() {
 
             appDao = appDatabase.appDao()
 
-            // Set the selected language in the database
             GlobalScope.launch {
                 appDao.updateLanguagePreference(defaultLanguage)
             }

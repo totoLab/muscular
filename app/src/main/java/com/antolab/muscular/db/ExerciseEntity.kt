@@ -46,5 +46,5 @@ data class ExerciseEntity(
     val description_it: String,
 
     @ColumnInfo(name = "language")
-    val language: String = "en"  // Default language, you might want to change this
+    val language: String = "en"  // Default language
 )

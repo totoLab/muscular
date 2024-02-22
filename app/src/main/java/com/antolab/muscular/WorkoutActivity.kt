@@ -170,7 +170,7 @@ class WorkoutActivity : AppCompatActivity() {
             }
 
             override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-                // Not needed for this example
+                // Not needed
             }
         }
 
@@ -249,7 +249,6 @@ class WorkoutActivity : AppCompatActivity() {
                 return
             }
 
-            // Create a notification with an initial message
             val notificationId = System.currentTimeMillis().toInt()
 
             countdownTimer = object : CountDownTimer(chosenTimer.toLong() * 1000, 1000) {
@@ -284,7 +283,7 @@ class WorkoutActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        // Save the button state and timer value when the activity is interrupted
+        // save the button state and timer value when the activity is interrupted
         preferences.edit {
             putBoolean(PREF_BUTTON_STATE, working)
             putInt(PREF_CHOSEN_TIMER, chosenTimer)

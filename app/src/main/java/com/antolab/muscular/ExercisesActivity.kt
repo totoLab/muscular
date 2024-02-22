@@ -30,7 +30,7 @@ class ExercisesActivity : AppCompatActivity() {
         val database = MyApplication.appDatabase
         appDao = database.appDao()
 
-        // Load selected language from SharedPreferences
+        // Load language from SharedPreferences
         selectedLanguage = loadLocate()
 
         val buttonAdd: Button = findViewById(R.id.button_exercise_new)
@@ -139,9 +139,7 @@ class ExercisesActivity : AppCompatActivity() {
         return outcome
     }
 
-
     fun showFullscreenImage(imageId: Int) {
-        // Create a dialog with a custom layout
         val fullscreenDialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         fullscreenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         fullscreenDialog.setContentView(R.layout.dialog_fullscreen_image)
