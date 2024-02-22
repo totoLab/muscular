@@ -31,7 +31,9 @@ class LocationBackgroundService : Service() {
 
     private val handler = Handler()
     private lateinit var notificationHelper: NotificationHelper
-    private val defaultGymQuery = if (true) "via nicola giunta" else "via marconi rende"
+
+    // assuming this is the gym chosen from the user
+    private val defaultGymQuery = if (false) "via nicola giunta" else "via marconi rende"
     private val minDistance: Double = 3.0 * 1000.0f
 
     private val LOGGING_TAG = "geocoding"
