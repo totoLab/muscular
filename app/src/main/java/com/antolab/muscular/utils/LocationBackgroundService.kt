@@ -150,7 +150,7 @@ class LocationBackgroundService : Service() {
         return g1.distanceToAsDouble(g2)
     }
 
-    @SuppressLint("MissingPermission") // todo: ask for permissions
+    @SuppressLint("MissingPermission") // assuming this is called only when permission is already granted
     private fun getCurrentLocation(callback: (GeoPoint) -> Unit) {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
