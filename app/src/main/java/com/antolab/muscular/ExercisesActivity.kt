@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.antolab.muscular.db.AppDao
 import com.antolab.muscular.db.ExerciseEntity
@@ -41,8 +42,9 @@ class ExercisesActivity : AppCompatActivity() {
                     instance.exercisesPrepopulation()
                     instance.setPrepopulation()
                 } else {
-                    // Handle if DB is not empty
-                }
+                    runOnUiThread(Runnable {
+                        Toast.makeText(this@ExercisesActivity, "DB is not empty", Toast.LENGTH_LONG).show()
+                    })                }
             }
         }
     }

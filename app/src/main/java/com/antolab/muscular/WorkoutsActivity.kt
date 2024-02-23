@@ -36,7 +36,9 @@ class WorkoutsActivity : AppCompatActivity() {
                     instance.programmesPrepopulation()
                     instance.pePrepopulation()
                 } else {
-                    Toast.makeText(this@WorkoutsActivity, "DB is not empty", Toast.LENGTH_LONG).show()
+                    runOnUiThread(Runnable {
+                        Toast.makeText(this@WorkoutsActivity, "DB is not empty", Toast.LENGTH_LONG).show()
+                    })
                 }
             }
         }
